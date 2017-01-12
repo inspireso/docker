@@ -1,1 +1,1 @@
-FROM gcr.io/google_containers/heapster-grafana:v4.0.2
+FROM gcr.io/google_containers/heapster-grafana:latest

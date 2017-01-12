@@ -1,1 +1,1 @@
-FROM gcr.io/google_containers/heapster:latest
+FROM kubernetes/heapster:canary

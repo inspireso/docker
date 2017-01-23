@@ -12,25 +12,38 @@ spec:
         k8s-app: grafana
     spec:
       nodeSelector:
-        kubernetes.io/hostname: kuben0
+        kubeadm.alpha.kubernetes.io/role: master
       volumes:
-        - name: grafana-storage
-          hostPath:
-            path: /var/lib/grafna
-        - name: grafana-config
-          emptyDir: {}
+      - name: grafana-storage
+        emptyDir: {}
       containers:
-        - name: grafana
-          image: grafana/grafana
-          ports:
-              - name: api
-                containerPort: 3000          
-          env:
-            - name: GF_SECURITY_ADMIN_PASSWORD
-              value: secret
-          volumeMounts:
-            - mountPath: /var/lib/grafana
-              name: grafana-storage
+      - name: grafana
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_grafana:latest
+        ports:
+        - name: api
+          containerPort: 3000
+        env:
+        - name: INFLUXDB_HOST
+          value: monitoring-influxdb
+        - name: GRAFANA_PORT
+          value: "3000"
+          # The following env variables are required to make Grafana accessible via
+          # the kubernetes api-server proxy. On production clusters, we recommend
+          # removing these env variables, setup auth for grafana, and expose the grafana
+          # service using a LoadBalancer or a public IP.
+        - name: GF_AUTH_BASIC_ENABLED
+          value: "false"
+        - name: GF_AUTH_ANONYMOUS_ENABLED
+          value: "true"
+        - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+          value: Admin
+        - name: GF_SERVER_ROOT_URL
+          # If you're only using the API Server proxy, set this value instead:
+          # value: /api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/
+          value: /
+        volumeMounts:
+        - mountPath: /var
+          name: grafana-storage
 
 ---
 apiVersion: v1
@@ -49,7 +62,7 @@ spec:
   # type: LoadBalancer
   type: NodePort
   ports:
-    - port: 3000
-      targetPort: 3000
+  - port: 3000
+    targetPort: 3000
   selector:
     k8s-app: grafana

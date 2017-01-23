@@ -13,11 +13,10 @@ spec:
         version: v6
     spec:
       nodeSelector:
-        kubernetes.io/hostname: kuben0
+        kubeadm.alpha.kubernetes.io/role: master
       containers:
       - name: heapster
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest
-        imagePullPolicy: IfNotPresent
         command:
         - /heapster
         - --source=kubernetes:https://kubernetes.default

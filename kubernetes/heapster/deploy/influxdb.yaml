@@ -15,29 +15,19 @@ spec:
         k8s-app: influxdb
     spec:
       nodeSelector:
-        kubernetes.io/hostname: kuben0
+        kubeadm.alpha.kubernetes.io/role: master
       volumes:
-        - name: influxdb-storage
-          emptyDir: {}
-        - name: influxdb-config
-          hostPath:
-            path: /etc/influxdb
+      - name: influxdb-storage
+        emptyDir: {}
       containers:
-        - name: influxdb
-          image: influxdb:1.2.0-rc1-alpine
-          ports:
-            - name: api
-              containerPort: 8086
-            - name: admin
-              containerPort: 8083
-          args:
-            - -config 
-            - /etc/influxdb/influxdb.conf
-          volumeMounts:
-            - mountPath: /var/lib/influxdb
-              name: influxdb-storage
-            - mountPath: /etc/influxdb
-              name: influxdb-config
+      - name: influxdb
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb:latest
+        args:
+          - -config
+          - /etc/influxdb/influxdb.conf
+        volumeMounts:
+        - mountPath: /data
+          name: influxdb-storage
 
 ---
 apiVersion: v1
@@ -54,11 +44,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - name: api
-      port: 8086
-      targetPort: 8086
-    - name: admin
-      port: 8083
-      targetPort: 8083
+  - name: api
+    port: 8086
+    targetPort: 8086
   selector:
     k8s-app: influxdb

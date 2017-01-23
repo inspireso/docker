@@ -1,8 +1,11 @@
-apiVersion: extensions/v1beta1
 kind: Deployment
+apiVersion: extensions/v1beta1
 metadata:
   name: monitoring-influxdb
   namespace: kube-system
+  labels:
+    task: monitoring
+    k8s-app: influxdb
 spec:
   replicas: 1
   template:
@@ -11,15 +14,30 @@ spec:
         task: monitoring
         k8s-app: influxdb
     spec:
-      containers:
-      - name: influxdb
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb
-        volumeMounts:
-        - mountPath: /data
-          name: influxdb-storage
+      nodeSelector:
+        kubernetes.io/hostname: kuben0
       volumes:
-      - name: influxdb-storage
-        emptyDir: {}
+        - name: influxdb-storage
+          emptyDir: {}
+        - name: influxdb-config
+          hostPath:
+            path: /etc/influxdb
+      containers:
+        - name: influxdb
+          image: influxdb:1.2.0-rc1-alpine
+          ports:
+            - name: api
+              containerPort: 8086
+            - name: admin
+              containerPort: 8083
+          args:
+            - -config 
+            - /etc/influxdb/influxdb.conf
+          volumeMounts:
+            - mountPath: /var/lib/influxdb
+              name: influxdb-storage
+            - mountPath: /etc/influxdb
+              name: influxdb-config
 
 ---
 apiVersion: v1
@@ -34,8 +52,13 @@ metadata:
   name: monitoring-influxdb
   namespace: kube-system
 spec:
+  type: NodePort
   ports:
-  - port: 8086
-    targetPort: 8086
+    - name: api
+      port: 8086
+      targetPort: 8086
+    - name: admin
+      port: 8083
+      targetPort: 8083
   selector:
     k8s-app: influxdb

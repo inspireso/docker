@@ -8,12 +8,15 @@ spec:
   template:
     metadata:
       labels:
-        task: monitoring
         k8s-app: heapster
+        task: monitoring
+        version: v6
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: kuben0
       containers:
       - name: heapster
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest
         imagePullPolicy: IfNotPresent
         command:
         - /heapster
@@ -34,7 +37,7 @@ metadata:
   namespace: kube-system
 spec:
   ports:
-  - port: 80
+  - port: 8082
     targetPort: 8082
   selector:
     k8s-app: heapster

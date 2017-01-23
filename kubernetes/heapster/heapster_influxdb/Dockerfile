@@ -1,1 +1,1 @@
-FROM gcr.io/google_containers/heapster-influxdb:v1.1.1
+FROM gcr.io/google_containers/heapster-influxdb:latest

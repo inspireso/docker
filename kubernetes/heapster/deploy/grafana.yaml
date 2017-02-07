@@ -29,8 +29,16 @@ spec:
         env:
         - name: GF_SECURITY_ADMIN_PASSWORD
           value: secret
-        - name: GF_SMTP_ENABLE
+        - name: GF_SMTP_ENABLED
           value: "true"
+        - name: GF_SMTP_FROM_ADDRESS
+          value: notify@inspireso.org
+        - name: GF_SMTP_HOST
+          value: smtp.inspireso.org:25
+        - name: GF_SMTP_USER
+          value: notify@inspireso.org
+        - name: GF_SMTP_PASSWORD
+          value: Mail@2016
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-storage

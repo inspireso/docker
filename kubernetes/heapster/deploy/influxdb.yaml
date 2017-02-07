@@ -23,9 +23,6 @@ spec:
       - name: influxdb
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb:latest
         imagePullPolicy: Always
-        args:
-          - -config
-          - /etc/influxdb/influxdb.conf
         volumeMounts:
         - mountPath: /data
           name: influxdb-storage

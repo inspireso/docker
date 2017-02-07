@@ -17,6 +17,7 @@ spec:
       containers:
       - name: heapster
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest
+        imagePullPolicy: Always
         command:
         - /heapster
         - --source=kubernetes:https://kubernetes.default

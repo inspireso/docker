@@ -12,14 +12,17 @@ spec:
         k8s-app: grafana
     spec:
       nodeSelector:
-        kubernetes.io/hostname: kuben0
+        kubeadm.alpha.kubernetes.io/role: master
       volumes:
       - name: grafana-storage
         hostPath:
           path: /var/lib/grafna
+      - name: grafana-config
+        emptyDir: {}
       containers:
       - name: grafana
-        image: grafana/grafana
+        image: grafana/grafana:latest
+        imagePullPolicy: Always
         ports:
         - name: api
           containerPort: 3000

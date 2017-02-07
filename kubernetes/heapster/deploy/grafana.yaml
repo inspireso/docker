@@ -12,37 +12,32 @@ spec:
         k8s-app: grafana
     spec:
       nodeSelector:
-        kubeadm.alpha.kubernetes.io/role: master
+        kubernetes.io/hostname: kuben0
       volumes:
       - name: grafana-storage
-        emptyDir: {}
+        hostPath:
+          path: /var/lib/grafna
       containers:
       - name: grafana
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_grafana:latest
+        image: grafana/grafana
         ports:
         - name: api
           containerPort: 3000
         env:
-        - name: INFLUXDB_HOST
-          value: monitoring-influxdb
-        - name: GRAFANA_PORT
-          value: "3000"
-          # The following env variables are required to make Grafana accessible via
-          # the kubernetes api-server proxy. On production clusters, we recommend
-          # removing these env variables, setup auth for grafana, and expose the grafana
-          # service using a LoadBalancer or a public IP.
-        - name: GF_AUTH_BASIC_ENABLED
-          value: "false"
-        - name: GF_AUTH_ANONYMOUS_ENABLED
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: secret
+        - name: GF_SMTP_ENABLED
           value: "true"
-        - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-          value: Admin
-        - name: GF_SERVER_ROOT_URL
-          # If you're only using the API Server proxy, set this value instead:
-          # value: /api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/
-          value: /
+        - name: GF_SMTP_FROM_ADDRESS
+          value: notify@inspireso.org
+        - name: GF_SMTP_HOST
+          value: smtp.inspireso.org:25
+        - name: GF_SMTP_USER
+          value: notify@inspireso.org
+        - name: GF_SMTP_PASSWORD
+          value: Mail@2016
         volumeMounts:
-        - mountPath: /var
+        - mountPath: /var/lib/grafana
           name: grafana-storage
 
 ---

@@ -45,5 +45,8 @@ spec:
   - name: api
     port: 8086
     targetPort: 8086
+  - name: admin
+    port: 8083
+    targetPort: 8083
   selector:
     k8s-app: influxdb

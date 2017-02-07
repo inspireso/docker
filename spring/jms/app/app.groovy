@@ -24,23 +24,27 @@ import java.sql.SQLException
 @EnableScheduling
 class JmsInfluxDBConfiguration {
     final Logger logger = LoggerFactory.getLogger(JmsInfluxDBConfiguration.class);
-
     final String JMS_QUEUES_TABLES_FORMAT = "SELECT OWNER, OBJECT_NAME FROM DBA_OBJECTS  WHERE OBJECT_TYPE='TABLE' AND OBJECT_NAME like :name AND OWNER = :owner";
     final String JMS_CHECK_SQL_FORMAT = "SELECT COUNT(1) FROM %s WHERE RETRY_COUNT < 5"
-
-    String dbName = "jms"
-    String url = "http://192.168.8.16:32249"
-    String user = "apm"
-    String password = "apm"
-
     org.influxdb.InfluxDB influxDB
+
+    @Value('${ips.apm.influxdb.dbname:jms}')
+    String dbName
+
+    @Value('${ips.apm.influxdb.url:http://192.168.8.16:32249}')
+    String url
+
+    @Value('${ips.apm.influxdb.user:apm}')
+    String user
+
+    @Value('${ips.apm.influxdb.password:apm}')
+    String password
 
     @Value('${ips.apm.jms.schemas}')
     String[] schemas
 
     @Autowired
     JdbcTemplate jdbcTemplate
-
 
     @PostConstruct
     void init() {

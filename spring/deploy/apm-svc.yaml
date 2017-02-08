@@ -1,0 +1,70 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: apm-svc
+  labels:
+    app: apm-svc
+    env: uat
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: apm-svc
+      labels:
+        app: apm-svc
+        env: uat
+    spec:
+      nodeSelector:
+        env: uat
+      containers:
+      - name: apm-svc
+        image: registry.cn-hangzhou.aliyuncs.com/apm_containers/apm-server:latest
+        imagePullPolicy: Always
+        workingDir: /apm
+        command:
+        - java
+        args:
+        - -Djava.security.egd=file:/dev/./urandom
+        - -Dspring.application.name=IPS.APM
+        - -Deureka.instance.hostname=192.168.8.16
+        - -Deureka.instance.ip-address=192.168.8.16
+        - -Deureka.instance.non-secure-port=30544
+        - -Dspring.application.registry=http://192.168.8.104:8762
+        - -Dips.apm.influxdb.url=http://influxdb.default:8086
+        - -jar
+        - /apm/apm-server.jar
+        ports:
+        - name: http
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: apm-svc
+    env: uat
+  name: apm-svc
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    nodePort: 30544
+  selector:
+    app: apm-svc
+    env: uat

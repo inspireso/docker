@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: apm-jms
+  labels:
+    app: apm-jms
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: apm-jms
+      labels:
+        app: apm-jms
+    spec:
+      containers:
+      - name: apm-jms
+        image: registry.cn-hangzhou.aliyuncs.com/apm_containers/apm-jms:latest
+        imagePullPolicy: Always
+        workingDir: /usr/jms
+        env:
+        - name: JAVA_OPTS
+          value: "-Dips.apm.influxdb.url=http://influxdb.default:8086 -Dspring.datasource.url=jdbc:oracle:thin:@192.168.8.196:1521/RAC_SVC2 -Dspring.datasource.username=apm -Dspring.datasource.password=apm22016"
+        command:
+        - spring
+        - run
+        - app.groovy
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        resources:
+          requests:
+            cpu: 500m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi

@@ -65,7 +65,7 @@ class JmsInfluxDBConfiguration {
 
     }
 
-    @RequestMapping(path = "/health", method = RequestMethod.GET)
+    @RequestMapping(path = "/health", method = { RequestMethod.GET })
     String health() {
         return "Ok"
     }

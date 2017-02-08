@@ -1,0 +1,10 @@
+#Wed Feb 08 08:07:54 CST 2017
+logging-interceptor-3.5.0.jar=2
+moshi-1.2.0.jar=2
+converter-moshi-2.1.0.jar=2
+retrofit-2.1.0.jar=2
+influxdb-java-2.5.jar=2
+okio-1.11.0.jar=2
+guava-20.0.jar=2
+okhttp-3.5.0.jar=2
+ojdbc14-10.2.0.5.jar=1

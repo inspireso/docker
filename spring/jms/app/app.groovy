@@ -101,7 +101,6 @@ class JmsInfluxDBConfiguration {
 
                 @Override
                 String mapRow(ResultSet resultSet, int i) throws SQLException {
-                    logger.info("queue:({}.{})", resultSet.getString("OWNER"), resultSet.getString("OBJECT_NAME"))
                     return resultSet.getString("OWNER") + "." + resultSet.getString("OBJECT_NAME");
                 }
             }, "%JMS_%", schema);

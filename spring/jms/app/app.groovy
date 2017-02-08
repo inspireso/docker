@@ -16,12 +16,16 @@ import org.springframework.jdbc.core.ResultSetExtractor
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
 
 import javax.annotation.PostConstruct
 import java.sql.ResultSet
 import java.sql.SQLException
 
 @EnableScheduling
+@RestController
 class JmsInfluxDBConfiguration {
     final Logger logger = LoggerFactory.getLogger(JmsInfluxDBConfiguration.class);
     final String JMS_QUEUES_TABLES_FORMAT = "SELECT OWNER, OBJECT_NAME FROM DBA_OBJECTS  WHERE OBJECT_TYPE='TABLE' AND OBJECT_NAME like :name AND OWNER = :owner";
@@ -61,6 +65,11 @@ class JmsInfluxDBConfiguration {
 
     }
 
+    @RequestMapping(path = "/health", method = RequestMethod.GET)
+    String health() {
+        return "Ok"
+    }
+
     /**
      * 30秒检查一次
      */
@@ -77,7 +86,7 @@ class JmsInfluxDBConfiguration {
             points(batchPoints, schema, schemaQueueNameMap.get(schema));
         }
 
-        if (!batchPoints.points.isEmpty()){
+        if (!batchPoints.points.isEmpty()) {
             influxDB.write(batchPoints)
             logger.info("### write to influxdb success!")
         }

@@ -40,7 +40,7 @@ class JmsInfluxDBConfiguration {
     @Value('${ips.apm.influxdb.password:apm}')
     String password
 
-    @Value('${ips.apm.jms.schemas}')
+    @Value('${ips.apm.jms.schemas:SA_PROD,DC_PROD}')
     String[] schemas
 
     @Autowired
@@ -87,7 +87,7 @@ class JmsInfluxDBConfiguration {
     ArrayListMultimap<String, String> getSchemaQueueNameMap() {
         ArrayListMultimap result = ArrayListMultimap.create();
         for (String schema : schemas) {
-            logger.info("query schema({})", schema)
+            logger.debug("query schema({})", schema)
             List<String> queueNames = jdbcTemplate.query(JMS_QUEUES_TABLES_FORMAT, new RowMapper<String>() {
 
                 @Override
@@ -122,7 +122,7 @@ class JmsInfluxDBConfiguration {
                     return 0L;
             }
         });
-        logger.info("point queue(length:{},schema:{},name:{})", count, schema, queue)
+        logger.debug("point queue(length:{},schema:{},name:{})", count, schema, queue)
         return Point.measurement("queue")
                 .addField("length", count)
                 .tag("schema", schema)

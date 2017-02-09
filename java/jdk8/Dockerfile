@@ -1,4 +1,4 @@
-FROM busybox:glibc
+FROM progrium/busybox
 
 ENV LANG=C.UTF-8 \
     JAVA_VERSION=8 \
@@ -7,11 +7,10 @@ ENV LANG=C.UTF-8 \
     JAVA_PATH=e9e7ea248e2c4826b92b3f075a80e441 \
     JAVA_HOME="/usr/lib/jvm/default-jvm"
 
-RUN \
-#    apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
+RUN opkg-install wget && \
     cd "/tmp" && \
     wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
-        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/${JAVA_PATH}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz?AuthParam=1486631705_a5ee4b6514c5ea0dc13908528eb91d5a" && \
+        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/${JAVA_PATH}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     mkdir -p "/usr/lib/jvm" && \
     mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
@@ -41,5 +40,4 @@ RUN \
         "http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION}/jce_policy-${JAVA_VERSION}.zip" && \
     unzip -jo -d "${JAVA_HOME}/jre/lib/security" "jce_policy-${JAVA_VERSION}.zip" && \
     rm "${JAVA_HOME}/jre/lib/security/README.txt" && \
-#    apk del build-dependencies && \
     rm "/tmp/"*

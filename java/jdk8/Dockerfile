@@ -1,15 +1,14 @@
-FROM progrium/busybox
+FROM alpine:3.5
 
-# Udate wget to support SSL
-RUN opkg-install wget
-
-ENV JAVA_VERSION=8 \
+ENV LANG=C.UTF-8 \
+    JAVA_VERSION=8 \
     JAVA_UPDATE=121 \
     JAVA_BUILD=13 \
     JAVA_PATH=e9e7ea248e2c4826b92b3f075a80e441 \
     JAVA_HOME="/usr/lib/jvm/default-jvm"
 
-RUN cd "/tmp" && \
+RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
+    cd "/tmp" && \
     wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
         "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/${JAVA_PATH}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
@@ -41,4 +40,5 @@ RUN cd "/tmp" && \
         "http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION}/jce_policy-${JAVA_VERSION}.zip" && \
     unzip -jo -d "${JAVA_HOME}/jre/lib/security" "jce_policy-${JAVA_VERSION}.zip" && \
     rm "${JAVA_HOME}/jre/lib/security/README.txt" && \
+    apk del build-dependencies && \
     rm "/tmp/"*

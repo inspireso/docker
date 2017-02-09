@@ -9,7 +9,7 @@ ENV LANG=C.UTF-8 \
 
 RUN opkg-install wget && \
     cd "/tmp" && \
-    wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
         "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/${JAVA_PATH}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     mkdir -p "/usr/lib/jvm" && \
@@ -36,7 +36,7 @@ RUN opkg-install wget && \
            "$JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so" \
            "$JAVA_HOME/jre/lib/amd64/"libjavafx*.so \
            "$JAVA_HOME/jre/lib/amd64/"libjfx*.so && \
-    wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
         "http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION}/jce_policy-${JAVA_VERSION}.zip" && \
     unzip -jo -d "${JAVA_HOME}/jre/lib/security" "jce_policy-${JAVA_VERSION}.zip" && \
     rm "${JAVA_HOME}/jre/lib/security/README.txt" && \

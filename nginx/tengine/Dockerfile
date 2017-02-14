@@ -51,7 +51,7 @@ RUN \
       linux-headers \
       curl \
       jemalloc-dev \
-  && curl "https://github.com/alibaba/tengine/archive/$TENGINE_VERSION.zip" -o tengine.zip \
+  && curl -v --insecure "https://github.com/alibaba/tengine/archive/$TENGINE_VERSION.zip" -o tengine.zip \
   && mkdir -p /usr/src \
   && unzip tengine.zip -d /usr/src \
   && rm tengine.zip \

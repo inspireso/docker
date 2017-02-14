@@ -50,7 +50,7 @@ RUN \
       zlib-dev \
       linux-headers \
       curl \
-      jemalloc-dev
+      jemalloc-dev \
   && curl "https://github.com/alibaba/tengine/archive/$TENGINE_VERSION.zip" -o tengine.zip \
   && mkdir -p /usr/src \
   && unzip tengine.zip -d /usr/src \

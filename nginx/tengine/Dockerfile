@@ -78,8 +78,7 @@ RUN \
   )" \
   && apk add --virtual .nginx-rundeps $runDeps \
   && apk del .build-deps \
-  && rm -rf /usr/src/nginx-$NGINX_VERSION \
-  && apk add --no-cache gettext
+  && rm -rf /usr/src/nginx-$NGINX_VERSION
 
 EXPOSE 80 443
 

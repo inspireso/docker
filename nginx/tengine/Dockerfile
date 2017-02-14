@@ -79,14 +79,7 @@ RUN \
   && apk add --virtual .nginx-rundeps $runDeps \
   && apk del .build-deps \
   && rm -rf /usr/src/nginx-$NGINX_VERSION \
-  && apk add --no-cache gettext \
-
-  # forward request and error logs to docker log collector
-#  && ln -sf /dev/stdout /var/log/nginx/access.log \
-#  && ln -sf /dev/stderr /var/log/nginx/error.log
-
-#COPY nginx.conf /etc/nginx/nginx.conf
-#COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+  && apk add --no-cache gettext
 
 EXPOSE 80 443
 

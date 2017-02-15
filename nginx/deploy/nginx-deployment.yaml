@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tengine
+  labels:
+    app: tengine
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: tengine
+      labels:
+        app: tengine
+    spec:
+      volumes:
+      - name: log
+        emptyDir: {}
+      - name: nginx-conf
+        nfs:
+          server: 192.168.8.19
+          path: /mnt/fs/nfs/config/nginx/conf.d
+      containers:
+      - name: nginx
+        image: registry.cn-hangzhou.aliyuncs.com/ng_containers/tengine:2.1.3
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d
+        - name: log
+          mountPath: /var/log
+        resources:
+          limits:
+            cpu: 2000m
+      - name: fluent
+        image: registry.cn-hangzhou.aliyuncs.com/ng_containers/fluent:latest
+        imagePullPolicy: Always
+        env:
+        - name: ES_HOST
+          value: elastic.kube-system
+        - name: ES_PORT
+          value: "9200"
+        volumeMounts:
+        - name: log
+          mountPath: /var/log
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            cpu: 1000m
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: tengine
+  name: tengine
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
+  selector:
+    app: tengine
+#  sessionAffinity: ClientIP

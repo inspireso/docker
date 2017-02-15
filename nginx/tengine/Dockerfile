@@ -78,7 +78,8 @@ RUN \
   )" \
   && apk add --virtual .nginx-rundeps $runDeps \
   && apk del .build-deps \
-  && rm -rf /usr/src/nginx-$NGINX_VERSION
+  && rm -rf /usr/src/nginx-$NGINX_VERSION \
+  && ln -sf /dev/stderr /var/log/nginx/error.log
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.default.conf /etc/nginx/conf.d/default.conf

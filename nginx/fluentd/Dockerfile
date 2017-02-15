@@ -9,7 +9,9 @@ RUN apk add --update --virtual .build-deps \
 
     # cutomize following instruction as you wish
     && sudo -u fluent gem install \
+        fluentd \
         fluent-plugin-elasticsearch \
+        fluent-plugin-prometheus \
 
     && sudo -u fluent gem sources --clear-all \
     && apk del .build-deps \

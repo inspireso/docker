@@ -46,7 +46,7 @@ spec:
           value: "9200"
         volumeMounts:
         - name: log
-          mountPath: /var/log/nginx
+          mountPath: /var/log
         resources:
           requests:
             cpu: 50m

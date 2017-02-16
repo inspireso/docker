@@ -52,7 +52,7 @@ spec:
         resources:
           limits:
             cpu: 2000m
-      - name: fluent
+      - name: fluentd
         image: registry.cn-hangzhou.aliyuncs.com/ng_containers/fluentd:latest
         imagePullPolicy: Always
         env:

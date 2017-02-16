@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: ES_HOST
-          value: elastic.kube-system
+          value: elasticsearch.kube-system
         - name: ES_PORT
           value: "9200"
         volumeMounts:

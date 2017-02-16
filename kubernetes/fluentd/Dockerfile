@@ -12,8 +12,9 @@ RUN \
   && gem sources --clear-all \
   && apk del .build-deps \
   && rm -rf /var/cache/apk/* \
-  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem \
-  && fluentd --setup /etc/fluentd
+  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
+
+RUN fluentd --setup /etc/fluentd
 
 COPY fluent.conf /etc/fluentd/
 

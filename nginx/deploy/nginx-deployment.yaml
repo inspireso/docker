@@ -11,6 +11,22 @@ spec:
       name: tengine
       labels:
         app: tengine
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+          {
+            "name": "init",
+            "image": "busybox",
+            "imagePullPolicy": "IfNotPresent",
+            "command": ["/bin/sh", "-c"],
+            "args": ["mkdir -p /tmp/nginx"],
+            "volumeMounts": [
+              {
+                "name": "log",
+                "mountPath": "/tmp"
+              }
+            ]
+          }
+        ]'
     spec:
       volumes:
       - name: log
@@ -32,7 +48,7 @@ spec:
         - name: nginx-conf
           mountPath: /etc/nginx/conf.d
         - name: log
-          mountPath: /var/log/nginx
+          mountPath: /var/log
         resources:
           limits:
             cpu: 2000m
@@ -41,7 +57,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: ES_HOST
-          value: elastic.kube-system
+          value: elasticsearch.kube-system
         - name: ES_PORT
           value: "9200"
         volumeMounts:
@@ -64,10 +80,10 @@ spec:
   ports:
   - name: http
     port: 80
-    targetPort: 80
+    targetPort: http
   - name: https
     port: 443
-    targetPort: 443
+    targetPort: https
   selector:
     app: tengine
 #  sessionAffinity: ClientIP

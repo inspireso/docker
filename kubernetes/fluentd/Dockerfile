@@ -18,4 +18,4 @@ RUN fluentd --setup /etc/fluentd
 
 COPY fluent.conf /etc/fluentd/
 
-CMD ["fluentd" "-c" "/etc/fluentd/fluent.conf"]
+CMD ["exec", "fluentd", "-c", "/etc/fluentd/fluent.conf"]

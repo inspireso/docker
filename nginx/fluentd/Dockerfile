@@ -5,7 +5,8 @@ COPY fluent.conf /fluentd/etc/
 USER root
 
 RUN apk add --update --virtual .build-deps \
-    sudo build-base ruby-dev \
+    build-base \
+    ruby-dev \
 
     # cutomize following instruction as you wish
     && sudo -u fluent gem install \

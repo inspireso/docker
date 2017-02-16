@@ -18,10 +18,11 @@ spec:
       - name: nginx-conf
         nfs:
           server: 192.168.8.19
-          path: /mnt/fs/nfs/config/nginx/conf.d
+          path: /mnt/fs/nfs/config/nginx/conf.d/
       containers:
       - name: nginx
         image: registry.cn-hangzhou.aliyuncs.com/ng_containers/tengine:2.1.3
+        imagePullPolicy: Always
         ports:
         - name: http
           containerPort: 80
@@ -31,12 +32,12 @@ spec:
         - name: nginx-conf
           mountPath: /etc/nginx/conf.d
         - name: log
-          mountPath: /var/log
+          mountPath: /var/log/nginx
         resources:
           limits:
             cpu: 2000m
       - name: fluent
-        image: registry.cn-hangzhou.aliyuncs.com/ng_containers/fluent:latest
+        image: registry.cn-hangzhou.aliyuncs.com/ng_containers/fluentd:latest
         imagePullPolicy: Always
         env:
         - name: ES_HOST
@@ -45,7 +46,7 @@ spec:
           value: "9200"
         volumeMounts:
         - name: log
-          mountPath: /var/log
+          mountPath: /var/log/nginx
         resources:
           requests:
             cpu: 50m

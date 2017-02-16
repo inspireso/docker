@@ -1,0 +1,43 @@
+kind: DaemonSet
+apiVersion: extensions/v1beta1
+metadata:
+  name: fluentd-es
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-es
+    kubernetes.io/cluster-service: "true"
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: fluentd-es
+        kubernetes.io/cluster-service: "true"
+    spec:
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      containers:
+      - name: fluentd-es
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/fluentd:latest
+        imagePullPolicy: Always
+        env:
+        - name: ES_HOST
+          value: elastic.kube-system
+        - name: ES_PORT
+          value: "9200"
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            memory: 200Mi

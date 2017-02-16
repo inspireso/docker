@@ -1,19 +1,20 @@
-FROM fluent/fluentd:v0.14
+FROM registry.cn-hangzhou.aliyuncs.com/base_containers/fluentd:v0.14
 
-COPY fluent.conf /fluentd/etc/
+RUN \
+  apk add --update --virtual .build-deps \
+    build-base \
+    ruby-dev \
 
-USER root
+  # cutomize following instruction as you wish
+  && gem install \
+      fluent-plugin-kubernetes_metadata_filter \
+      fluent-plugin-elasticsearch \
+  && gem sources --clear-all \
+  && apk del .build-deps \
+  && rm -rf /var/cache/apk/* \
+  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
+  && fluentd --setup /etc/fluentd
 
-RUN apk add --update --virtual .build-deps \
-    sudo build-base ruby-dev \
+COPY fluent.conf /etc/fluentd/
 
-    # cutomize following instruction as you wish
-    && sudo -u fluent gem install \
-        fluent-plugin-kubernetes_metadata_filter \
-        fluent-plugin-elasticsearch \
-        fluent-plugin-prometheus \
-
-    && sudo -u fluent gem sources --clear-all \
-    && apk del .build-deps \
-    && rm -rf /var/cache/apk/* \
-       /home/fluent/.gem/ruby/2.3.0/cache/*.gem
+CMD ["fluentd" "-c" "/etc/fluentd/fluent.conf"]

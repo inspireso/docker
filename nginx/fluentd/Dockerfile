@@ -1,20 +1,7 @@
-FROM fluent/fluentd:v0.14
+FROM registry.cn-hangzhou.aliyuncs.com/base_containers/fluentd:es
 
-COPY fluent.conf /fluentd/etc/
+RUN fluentd --setup /etc/fluentd
 
-USER root
+COPY fluent.conf /etc/fluentd/
 
-RUN apk add --update --virtual .build-deps \
-    build-base \
-    ruby-dev \
-
-    # cutomize following instruction as you wish
-    && sudo -u fluent gem install \
-        fluentd \
-        fluent-plugin-elasticsearch \
-        fluent-plugin-prometheus \
-
-    && sudo -u fluent gem sources --clear-all \
-    && apk del .build-deps \
-    && rm -rf /var/cache/apk/* \
-       /home/fluent/.gem/ruby/2.3.0/cache/*.gem
+CMD exec fluentd -c /etc/fluentd/fluent.conf

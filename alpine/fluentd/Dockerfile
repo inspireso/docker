@@ -20,4 +20,4 @@ RUN apk update \
   && rm -rf /var/cache/apk/* \
   && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
 
-CMD ["exec" "fluentd"]
+CMD ["sh"]

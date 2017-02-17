@@ -53,6 +53,12 @@ spec:
         resources:
           limits:
             cpu: 2000m
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
       - name: fluentd
         image: registry.cn-hangzhou.aliyuncs.com/ng_containers/fluentd:latest
         imagePullPolicy: Always
@@ -76,6 +82,8 @@ metadata:
   labels:
     app: tengine
   name: tengine
+  annotations:
+    service nodeport service.beta.kubernetes.io/external-traffic: OnlyLocal
 spec:
   type: NodePort
   ports:

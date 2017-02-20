@@ -1,0 +1,46 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: registry
+  namespace: dev
+  labels:
+    app: registry
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: registry
+      labels:
+        app: registry
+    spec:
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: nfs-pvc
+      containers:
+      - name: registry
+        image: registry:2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 5000
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/registry
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry
+  namespace: dev
+  labels:
+    app: registry
+
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 5000
+  selector:
+    app: registry

@@ -51,6 +51,8 @@ spec:
         - name: log
           mountPath: /var/log
         resources:
+          requests:
+            cpu: 500m
           limits:
             cpu: 2000m
         livenessProbe:
@@ -82,14 +84,13 @@ metadata:
   labels:
     app: tengine
   name: tengine
-  annotations:
-    service nodeport service.beta.kubernetes.io/external-traffic: OnlyLocal
 spec:
   type: NodePort
   ports:
   - name: http
     port: 80
     targetPort: http
+    nodePort: 30522
   - name: https
     port: 443
     targetPort: https

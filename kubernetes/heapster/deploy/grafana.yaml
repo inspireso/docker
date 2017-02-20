@@ -11,8 +11,6 @@ spec:
         task: monitoring
         k8s-app: grafana
     spec:
-      nodeSelector:
-        kubeadm.alpha.kubernetes.io/role: master
       volumes:
       - name: grafana-storage
         hostPath:

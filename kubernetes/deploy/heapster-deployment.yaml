@@ -1,0 +1,56 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: heapster
+  namespace: kube-system
+  labels:
+    task: monitoring
+    app: heapster
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        task: monitoring
+        app: heapster
+      # Comment the following annotation if Dashboard must not be deployed on master
+      annotations:
+        scheduler.alpha.kubernetes.io/tolerations: |
+          [
+            {
+              "key": "dedicated",
+              "operator": "Equal",
+              "value": "master",
+              "effect": "NoSchedule"
+            }
+          ]
+    spec:
+      nodeSelector:
+        kubeadm.alpha.kubernetes.io/role: master
+      containers:
+      - name: heapster
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest
+        imagePullPolicy: Always
+        command:
+        - /heapster
+        - --source=kubernetes:https://kubernetes.default
+        - --sink=influxdb:http://influxdb:8086
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    task: monitoring
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/cluster-service: 'true'
+    kubernetes.io/name: Heapster
+  name: heapster
+  namespace: kube-system
+spec:
+  ports:
+  - port: 8082
+    targetPort: 8082
+  selector:
+    app: heapster

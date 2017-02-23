@@ -4,14 +4,12 @@ metadata:
   name: fluentd-es
   namespace: kube-system
   labels:
-    k8s-app: fluentd-es
-    kubernetes.io/cluster-service: "true"
+    app: fluentd-es
 spec:
   template:
     metadata:
       labels:
-        k8s-app: fluentd-es
-        kubernetes.io/cluster-service: "true"
+        app: fluentd-es
     spec:
       volumes:
       - name: varlog

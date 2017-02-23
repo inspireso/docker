@@ -1,0 +1,53 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: logstash
+  namespace: default
+  labels:
+    app: logstash
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      name: logstash
+      labels:
+        app: logstash
+    spec:
+      containers: 
+      - name: logstash
+        image: logstash:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: input
+          containerPort: 4560
+          protocol: TCP
+        args:
+        - -e
+        - 'input {
+                tcp {
+                    port => 4560
+                    codec => json_lines
+                }
+            }
+            output {
+                elasticsearch { hosts => ["elasticsearch:9200"] }
+            }'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: logstash
+  namespace: default
+  labels:
+    app: logstash
+spec:
+  type: NodePort
+  ports:
+  - port: 4560
+    targetPort: input
+    nodePort: 32002
+  selector:
+    app: logstash

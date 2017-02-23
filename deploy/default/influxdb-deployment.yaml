@@ -1,0 +1,76 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: influxdb
+  namespace: default
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: influxdb
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+          {
+            "name": "config",
+            "image": "influxdb:1.2.0-alpine",
+            "imagePullPolicy": "IfNotPresent",
+            "command": ["/bin/sh", "-c"],
+            "args": ["influxd config > /tmp/influxdb.conf"],
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/tmp"
+              }
+            ]
+          }
+        ]'
+    spec:
+      volumes:
+      - name: config
+        hostPath:
+          path: /etc/influxdb
+      - name: data
+        emptyDir: {}
+      containers:
+      - name: influxdb
+        image: influxdb:1.2.0-alpine
+        ports:
+        - name: api
+          containerPort: 8086
+        - name: admin
+          containerPort: 8083
+        args:
+        - -config
+        - /etc/influxdb/influxdb.conf
+        env:
+        - name: INFLUXDB_ADMIN_ENABLED
+          value: "true"
+        volumeMounts:
+        - mountPath: /var/lib/influxdb
+          name: data
+        - mountPath: /etc/influxdb
+          readOnly: true
+          name: config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  namespace: default
+  labels:
+    app: influxdb
+spec:
+  type: NodePort
+  ports:
+  - name: api
+    port: 8086
+    targetPort: api
+  - name: admin
+    port: 8083
+    targetPort: admin
+  selector:
+    app: influxdb

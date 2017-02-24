@@ -8,7 +8,7 @@ mkdir -p "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana /etc/grafana
 
-exec gosu grafana /usr/sbin/grafana-server      \
+exec /usr/sbin/grafana-server      \
   --homepath=/usr/share/grafana                 \
   --config=/etc/grafana/grafana.ini             \
   cfg:default.paths.data="$GF_PATHS_DATA"       \

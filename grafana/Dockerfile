@@ -6,8 +6,6 @@ RUN apt-get update \
     && curl -v --insecure https://grafanarel.s3.amazonaws.com/builds/grafana_4.1.2-1486989747_amd64.deb -o grafana.deb \
     && dpkg -i grafana.deb \
     && rm -f grafana.deb \
-    && curl -L https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64 > /usr/sbin/gosu \
-    && chmod +x /usr/sbin/gosu \
     && apt-get remove -y curl \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*

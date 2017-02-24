@@ -14,5 +14,4 @@ EXPOSE 3000
 
 COPY ./run.sh /run.sh
 
-USER root
 CMD ["sh", "/run.sh"]

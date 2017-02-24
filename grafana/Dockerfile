@@ -14,4 +14,4 @@ EXPOSE 3000
 
 COPY ./run.sh /run.sh
 
-CMD ["/run.sh"]
+ENTRYPOINT ["/run.sh"]

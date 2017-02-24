@@ -7,7 +7,7 @@ RUN apt-get update \
     && dpkg -i grafana.deb \
     && rm -f grafana.deb \
     && apt-get remove -y curl \
-    && apt-get autoremove -y && \
+    && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
 

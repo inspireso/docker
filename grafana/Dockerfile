@@ -1,18 +1,16 @@
-FROM debian:jessie
+FROM debian:jessie-slim
 
-ARG DOWNLOAD_URL
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install wget \
+    && apt-get clean \
+    && wget https://grafanarel.s3.amazonaws.com/builds/grafana_4.1.2-1486989747_amd64.deb
+    && apt-get install -y adduser libfontconfig \
+    && dpkg -i grafana_4.1.2-1486989747_amd64.deb
+    && rm -f grafana_4.1.2-1486989747_amd64.deb
+    && apt-get remove -y wget \
+    && apt-get autoremove -y && \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
-    apt-get clean && \
-    curl ${DOWNLOAD_URL} > /tmp/grafana.deb && \
-    dpkg -i /tmp/grafana.deb && \
-    rm /tmp/grafana.deb && \
-    curl -L https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64 > /usr/sbin/gosu && \
-    chmod +x /usr/sbin/gosu && \
-    apt-get remove -y curl && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
 

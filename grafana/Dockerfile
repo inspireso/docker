@@ -10,11 +10,8 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
-
 EXPOSE 3000
-#
-#COPY ./run.sh /run.sh
 
-CMD exec service grafana-server start
+COPY ./run.sh /run.sh
+
+CMD ["/run.sh"]

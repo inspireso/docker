@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#! /usr/bin/env bash
 
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
 : "${GF_PATHS_LOGS:=/var/log/grafana}"

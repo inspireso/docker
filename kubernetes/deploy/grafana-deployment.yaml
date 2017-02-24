@@ -1,3 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-conf
+  namespace: kube-system
+type: Opaque
+data:
+  grafana.admin.password: c2VjcmV0
+  grafana.smtp.password: TWFpbEAyMDE2
+
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -13,7 +24,20 @@ spec:
       labels:
         task: monitoring
         app: grafana
+      # Comment the following annotation if Dashboard must not be deployed on master
+      annotations:
+        scheduler.alpha.kubernetes.io/tolerations: |
+          [
+            {
+              "key": "dedicated",
+              "operator": "Equal",
+              "value": "master",
+              "effect": "NoSchedule"
+            }
+          ]
     spec:
+      nodeSelector:
+        kubeadm.alpha.kubernetes.io/role: master
       volumes:
       - name: config
         hostPath:
@@ -26,8 +50,6 @@ spec:
         - name: api
           containerPort: 3000
         env:
-        - name: GF_SECURITY_ADMIN_PASSWORD
-          value: secret
         - name: GF_SMTP_ENABLED
           value: "true"
         - name: GF_SMTP_FROM_ADDRESS
@@ -37,10 +59,19 @@ spec:
         - name: GF_SMTP_USER
           value: notify@inspireso.org
         - name: GF_SMTP_PASSWORD
-          value: Mail@2016
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-conf
+              key: grafana.admin.password
+          valueFrom:
+            secretKeyRef:
+              name: grafana-conf
+              key: grafana.smtp.password
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: config
+#          subPath: grafana
 
 ---
 apiVersion: v1
@@ -57,5 +88,6 @@ spec:
   ports:
   - port: 3000
     targetPort: 3000
+    nodePort: 31336
   selector:
     app: grafana

@@ -17,4 +17,4 @@ EXPOSE 3000
 #
 #COPY ./run.sh /run.sh
 
-CMD exec /usr/sbin/grafana-server --config=/etc/grafana/grafana.ini  cfg:default.paths.data="$GF_PATHS_DATA" cfg:default.paths.logs="$GF_PATHS_LOGS" cfg:default.paths.plugins="$GF_PATHS_PLUGINS"
+CMD exec service grafana-server start

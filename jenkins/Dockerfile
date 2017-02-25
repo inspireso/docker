@@ -21,4 +21,4 @@ RUN set -x \
     && chmod 755 /usr/local/bin/jenkins.sh
 
 COPY run.sh /run.sh
-CMD ["/run.sh"]
+CMD ["sh", "/run.sh"]

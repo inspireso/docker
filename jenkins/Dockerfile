@@ -18,7 +18,6 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && apk del .gosu-deps \
-    && chmod 755 /usr/local/bin/jenkins.sh
 
 COPY run.sh /run.sh
 CMD ["sh", "/run.sh"]

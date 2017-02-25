@@ -1,0 +1,67 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-kube-system-pv
+  labels:
+    type: nfs
+    path: kube-system
+    mode: rw
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow"
+spec:
+  capacity:
+    storage: 150Gi
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.8.19
+    path: /mnt/fs/nfs/kube-system
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-default-pv
+  labels:
+    type: nfs
+    path: default
+    mode: rw
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow"
+spec:
+  capacity:
+    storage: 150Gi
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.8.19
+    path: /mnt/fs/nfs/default
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-devops-pv
+  labels:
+    type: nfs
+    path: devops
+    mode: rw
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow"
+spec:
+  capacity:
+    storage: 150Gi
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.8.19
+    path: /mnt/fs/nfs/devops

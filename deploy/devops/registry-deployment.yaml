@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: registry
-  namespace: dev
+  namespace: devops
   labels:
     app: registry
 spec:
@@ -27,13 +27,14 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/registry
+          subPath: registry
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: registry
-  namespace: dev
+  namespace: devops
   labels:
     app: registry
 

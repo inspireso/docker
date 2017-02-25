@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: jenkins
-  namespace: dev
+  namespace: devops
   labels:
     app: jenkins
 spec:
@@ -24,18 +24,19 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-        - containerPort: 50000
-          protocol: TCP
+#        - containerPort: 50000
+#          protocol: TCP
         volumeMounts:
         - name: data
           mountPath: /var/jenkins_home
+          subPath: jenkins
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: jenkins
-  namespace: dev
+  namespace: devops
   labels:
     app: jenkins
 
@@ -45,8 +46,8 @@ spec:
   - name: web
     port: 8080
     targetPort: 8080
-  - name: cluster
-    port: 50000
-    targetPort: 50000
+#  - name: cluster
+#    port: 50000
+#    targetPort: 50000
   selector:
     app: jenkins

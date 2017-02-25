@@ -19,4 +19,7 @@ RUN set -x \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true \
     && apk del .gosu-deps \
-    && chown -R 1000 "$JENKINS_HOME"
+    && chown -R 1000:1000 "$JENKINS_HOME"
+
+COPY run.sh /run.sh
+CMD ["/run.sh"]

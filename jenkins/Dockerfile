@@ -17,7 +17,6 @@ RUN set -x \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
-    && gosu nobody true \
     && apk del .gosu-deps \
     && chmod 755 /usr/local/bin/jenkins.sh
 

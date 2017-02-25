@@ -17,7 +17,7 @@ RUN set -x \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
-    && apk del .gosu-deps \
+    && apk del .gosu-deps
 
 COPY run.sh /run.sh
 CMD ["sh", "/run.sh"]

@@ -21,4 +21,4 @@ RUN set -x \
     && apk del .gosu-deps
 
 COPY run.sh /run.sh
-ENTRYPOINT ["sh"]
+CMD ["sh"]

@@ -18,7 +18,5 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true \
-    && apk del .gosu-deps
-
-COPY run.sh /run.sh
-CMD ["sh"]
+    && apk del .gosu-deps \
+    && chown -R 1000 "$JENKINS_HOME"

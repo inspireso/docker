@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: es-archived
+spec:
+  schedule: "* 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: es-archived
+            image: registry.cn-hangzhou.aliyuncs.com/base_containers/alpine-box:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - curl
+            - -X
+            - DELETE
+            - http://elasticsearch.kube-system:9200/kube-$(dateadd date -7d| dateconv -f "%Y.%m.%d")
+          restartPolicy: OnFailure

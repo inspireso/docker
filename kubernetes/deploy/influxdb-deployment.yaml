@@ -15,15 +15,17 @@ spec:
         app: influxdb
     spec:
       volumes:
-      - name: influxdb-storage
-        emptyDir: {}
+      - name: storage
+        persistentVolumeClaim:
+          claimName: nfs-pvc
       containers:
       - name: influxdb
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb:latest
         imagePullPolicy: Always
         volumeMounts:
         - mountPath: /data
-          name: influxdb-storage
+          name: storage
+          subPath: influxdb
 
 ---
 apiVersion: v1

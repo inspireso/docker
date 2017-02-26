@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: jenkins
-  namespace: devops
+  namespace: default
   labels:
     app: jenkins
 spec:
@@ -15,10 +15,10 @@ spec:
     spec:
       volumes:
       - name: data
-        hostPath:
-          path: /var/lib/jenkins
-#        persistentVolumeClaim:
-#          claimName: nfs-pvc
+#        hostPath:
+#          path: /var/lib/jenkins
+        persistentVolumeClaim:
+          claimName: nfs-pvc
       containers:
       - name: jenkins
         image: registry.cn-hangzhou.aliyuncs.com/base_containers/jenkins:latest
@@ -26,19 +26,26 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-#        - containerPort: 50000
-#          protocol: TCP
+        - containerPort: 50000
+          protocol: TCP
         volumeMounts:
         - name: data
           mountPath: /var/jenkins_home
-#          subPath: jenkins
+          subPath: jenkins
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 8Gi
+          requests:
+            cpu: 100m
+            memory: 2Gi
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: jenkins
-  namespace: devops
+  namespace: default
   labels:
     app: jenkins
 
@@ -48,8 +55,8 @@ spec:
   - name: web
     port: 8080
     targetPort: 8080
-#  - name: cluster
-#    port: 50000
-#    targetPort: 50000
+  - name: cluster
+    port: 50000
+    targetPort: 50000
   selector:
     app: jenkins

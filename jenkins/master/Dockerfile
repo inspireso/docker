@@ -18,9 +18,7 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && apk del .gosu-deps \
-    && apk add --no-cache subversion \
-    && rm -rf /var/cache/apk/* \
-    && rm -rf /tmp/* /var/tmp/*
+    && rm -rf /var/cache/apk/*
 
 
 COPY run.sh /run.sh

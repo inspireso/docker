@@ -5,9 +5,7 @@ ENV GOSU_VERSION 1.10
 USER root
 
 RUN set -x \
-    && apk update \
-    && apk add subversion \
-    && apk add --virtual .gosu-deps \
+    && apk add --no-cache --virtual .gosu-deps \
         dpkg \
         gnupg \
         openssl \
@@ -20,6 +18,7 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && apk del .gosu-deps \
+    && apk add --no-cache subversion \
     && rm -rf /var/cache/apk/* \
     && rm -rf /tmp/* /var/tmp/*
 

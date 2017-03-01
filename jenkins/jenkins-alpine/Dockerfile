@@ -5,6 +5,7 @@ ENV GOSU_VERSION 1.10
 USER root
 
 RUN apk update \
+    && apk upgrade \
     && apk add subversion
 
 RUN set -x \

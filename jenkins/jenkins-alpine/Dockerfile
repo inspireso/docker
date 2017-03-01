@@ -23,8 +23,5 @@ RUN set -x \
     && apk del .gosu-deps \
     && rm -rf /var/cache/apk/*
 
-RUN apk update \
-    && apk add subversion
-
 COPY run.sh /run.sh
 CMD ["sh", "/run.sh"]

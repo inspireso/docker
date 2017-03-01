@@ -1,6 +1,7 @@
 FROM jenkins:2.32.2-alpine
 
 ENV GOSU_VERSION 1.10
+ENV KUBE_VERSION v1.5.1
 
 USER root
 
@@ -21,6 +22,8 @@ RUN set -x \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
+    && wget  -O /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$KUBE_VERSION/bin/linux/amd64/kubectl" \
+    && chmod +x /usr/local/bin/kubectl \
     && apk del .gosu-deps \
     && rm -rf /var/cache/apk/*
 

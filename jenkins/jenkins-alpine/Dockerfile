@@ -4,6 +4,9 @@ ENV GOSU_VERSION 1.10
 
 USER root
 
+RUN apk update \
+    && apk add subversion
+
 RUN set -x \
     && apk add --no-cache --virtual .gosu-deps \
         dpkg \
@@ -18,9 +21,10 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && apk del .gosu-deps \
-    && rm -rf /var/cache/apk/* \
-    && rm -rf /tmp/* /var/tmp/*
+    && rm -rf /var/cache/apk/*
 
+RUN apk update \
+    && apk add subversion
 
 COPY run.sh /run.sh
 CMD ["sh", "/run.sh"]

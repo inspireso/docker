@@ -16,4 +16,4 @@ RUN set -x \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
-USER jenkins
+#USER jenkins

@@ -16,6 +16,9 @@ RUN set -x \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
+RUN mkdir -p /home/jenkins/cache/.yarn \
+    && mkdir -p /home/jenkins/cache/.npm
+
 COPY .npmrc /home/jenkins/.npmrc
 COPY .yarnrc /home/jenkins/.yarnrc
 #USER jenkins

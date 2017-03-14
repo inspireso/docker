@@ -13,8 +13,7 @@ ENV KUBE_VERSION v1.5.1
 
 RUN set -x \
     && wget -O /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$KUBE_VERSION/bin/linux/amd64/kubectl" \
-    && chmod +x /usr/local/bin/kubectl \
-    && kubectl version
+    && chmod +x /usr/local/bin/kubectl
 
 
 #添加docker工具

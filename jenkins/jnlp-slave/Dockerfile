@@ -21,24 +21,9 @@ RUN set -x \
 
 
 #添加docker工具
-ENV DOCKER_BUCKET get.docker.com
 ENV DOCKER_VERSION 1.12.5
-ENV DOCKER_SHA256 cadc6025c841e034506703a06cf54204e51d0cadfae4bae62628ac648d82efdd
 
-RUN set -x \
-    && apk add --no-cache --virtual .build-deps \
-            ca-certificates \
-            curl \
-            openssl \
-    && curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
-    && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
-    && tar -xzvf docker.tgz \
-    && mkdir -p /usr/local/bin \
-    && mv docker/* /usr/local/bin/ \
-    && rmdir docker \
-    && rm docker.tgz \
-    && apk del .build-deps \
-    && rm -rf /var/cache/apk/*
+COPY docker /usr/local/bin/
 
 RUN mkdir -p /home/jenkins/cache/.yarn \
     && mkdir -p /home/jenkins/cache/.npm

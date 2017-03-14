@@ -6,7 +6,6 @@ USER root
 RUN set -x \
     && apk add --no-cache \
       openssl \
-      ca-certificates \
       subversion
 
 #添加kubectl工具
@@ -15,8 +14,7 @@ ENV KUBE_VERSION v1.5.1
 RUN set -x \
     && wget -O /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$KUBE_VERSION/bin/linux/amd64/kubectl" \
     && chmod +x /usr/local/bin/kubectl \
-    && apk del .build-deps \
-    && rm -rf /var/cache/apk/*
+    && kubectl version
 
 
 #添加docker工具

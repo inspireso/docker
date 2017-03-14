@@ -25,6 +25,8 @@ ENV DOCKER_VERSION 1.12.5
 
 COPY docker /usr/local/bin/
 
+RUN chmod +x /usr/local/bin/docker
+
 RUN mkdir -p /home/jenkins/cache/.yarn \
     && mkdir -p /home/jenkins/cache/.npm
 

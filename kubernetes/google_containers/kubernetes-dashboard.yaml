@@ -49,7 +49,7 @@ spec:
         kubeadm.alpha.kubernetes.io/role: master
       containers:
       - name: kubernetes-dashboard
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/kubernetes-dashboard-amd64::v1.5.1
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/kubernetes-dashboard-amd64:v1.5.1
         imagePullPolicy: Always
         ports:
         - containerPort: 9090

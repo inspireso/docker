@@ -6,9 +6,6 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 You can now join any number of machines by running the following on each node:
 
-kubeadm join --token=1fb5bd.2d130bdef5754663 192.168.8.13
-
-
 
 ## prepare
 
@@ -45,14 +42,10 @@ EOF
 $ setenforce 0
 
 #安装指定版本的docker
-$ yum install -y docker-engine-selinux-1.11.2-1.el7.centos.noarch docker-engine-1.11.2-1.el7.centos.x86_64
+$ yum install -y docker-engine-selinux-1.12.5-1.el7.centos.noarch docker-engine-1.12.5-1.el7.centos.x86_64 
 $ sudo yum install -y kubelet kubeadm kubectl kubernetes-cni
 $ sudo systemctl enable docker && systemctl start docker
 $ sudo systemctl enable kubelet && systemctl start kubelet
-
-# 降级
-$ sudo yum downgrade docker
-
 
 # 配置镜像加速
 $ sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -86,7 +79,7 @@ EOF
 
 ```sh
 #下载镜像
-$ kube_version=v1.5.3
+$ kube_version=v1.5.1
 $ images=(kube-proxy-amd64:$kube_version kube-scheduler-amd64:$kube_version kube-controller-manager-amd64:$kube_version kube-apiserver-amd64:$kube_version etcd-amd64:3.0.14-kubeadm kube-dnsmasq-amd64:1.4 exechealthz-amd64:1.2 pause-amd64:3.0 dnsmasq-metrics-amd64:1.0 kube-discovery-amd64:1.0 kubedns-amd64:1.9)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
@@ -102,6 +95,8 @@ $ kubectl apply -f https://git.io/weave-kube
 
 #生产: 使用calico
 $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/addon/calico/calico.yaml
+
+$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/google_containers/kubernetes-dashboard.yaml
 ```
 
 
@@ -113,14 +108,14 @@ $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes
 ```sh
 $ nfs-utils
 
-$ images=(kube-proxy-amd64:v1.5.3 pause-amd64:3.0)
+$ images=(kube-proxy-amd64:v1.5.1 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName
   docker rmi registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
 done
 
-$ kubeadm join --token=8585e3.3fec8603cda0052e 192.168.8.13
+$ kubeadm join --token=xxxxxxxxxxxxx xxx.xxx.xxx.xxx
 ```
 
 

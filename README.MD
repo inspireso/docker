@@ -3,4 +3,5 @@
 - kubernetes: kubernetes相关的Dockerfile
 - nginx: nginx相关的Dockerfile
 - jenkins: jenkins相关的Dockerfile
+- BASEIMAGE: 制作基础镜像
 

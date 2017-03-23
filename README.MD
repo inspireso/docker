@@ -1,7 +1,9 @@
 #docker构建文档
 - master: 汇总最新的修改
+- BASEIMAGE: 基础镜像Dockerfile
 - kubernetes: kubernetes相关的Dockerfile
 - nginx: nginx相关的Dockerfile
 - jenkins: jenkins相关的Dockerfile
-- BASEIMAGE: 制作基础镜像
+- spring: 基于spring的镜像
+
 

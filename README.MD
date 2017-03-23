@@ -1,4 +1,4 @@
-#docker构建文档
+# docker构建文档
 - master: 汇总最新的修改
 - BASEIMAGE: 基础镜像Dockerfile
 - kubernetes: kubernetes相关的Dockerfile

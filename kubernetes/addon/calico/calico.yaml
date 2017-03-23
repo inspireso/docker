@@ -9,9 +9,8 @@ data:
   # defined below.
   etcd_endpoints: "http://10.96.232.136:6666"
 
-  # True enables BGP networking, false tells Calico to enforce
-  # policy only, using native networking.
-  enable_bgp: "true"
+  # Configure the Calico backend to use.
+  calico_backend: "bird"
 
   # The CNI network configuration to install on each node.
   cni_network_config: |-
@@ -32,18 +31,6 @@ data:
             "kubeconfig": "/etc/cni/net.d/__KUBECONFIG_FILENAME__"
         }
     }
-
-  # The default IP Pool to be created for the cluster.
-  # Pod IP addresses will be assigned from this pool.
-  ippool.yaml: |
-      apiVersion: v1
-      kind: ipPool
-      metadata:
-        cidr: 192.168.0.0/16
-      spec:
-        ipip:
-          enabled: true
-        nat-outgoing: true
 
 ---
 
@@ -143,7 +130,7 @@ spec:
         # container programs network policy and routes on each
         # host.
         - name: calico-node
-          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/node:v1.0.2
+          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/node:v1.1.0
           env:
             # The location of the Calico etcd cluster.
             - name: ETCD_ENDPOINTS
@@ -152,21 +139,28 @@ spec:
                   name: calico-config
                   key: etcd_endpoints
             # Enable BGP.  Disable to enforce policy only.
-            - name: CALICO_NETWORKING
+            - name: CALICO_NETWORKING_BACKEND
               valueFrom:
                 configMapKeyRef:
                   name: calico-config
-                  key: enable_bgp
+                  key: calico_backend
             # Disable file logging so `kubectl logs` works.
             - name: CALICO_DISABLE_FILE_LOGGING
               value: "true"
             # Set Felix endpoint to host default action to ACCEPT.
             - name: FELIX_DEFAULTENDPOINTTOHOSTACTION
               value: "ACCEPT"
-            # Don't configure a default pool.  This is done by the Job
-            # below.
-            - name: NO_DEFAULT_POOLS
-              value: "true"
+            # Configure the IP Pool from which Pod IPs will be chosen.
+            - name: CALICO_IPV4POOL_CIDR
+              value: "10.1.0.0/16"
+            - name: CALICO_IPV4POOL_IPIP
+              value: "always"
+            # Disable IPv6 on Kubernetes.
+            - name: FELIX_IPV6SUPPORT
+              value: "false"
+            # Set Felix logging to "info"
+            - name: FELIX_LOGSEVERITYSCREEN
+              value: "info"
             # Auto-detect the BGP IP address.
             - name: IP
               value: ""
@@ -182,7 +176,7 @@ spec:
         # This container installs the Calico CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/cni:v1.5.6
+          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/cni:v1.6.0
           command: ["/install-cni.sh"]
           env:
             # The location of the Calico etcd cluster.
@@ -268,52 +262,3 @@ spec:
             # kubernetes.default to the correct service clusterIP.
             - name: CONFIGURE_ETC_HOSTS
               value: "true"
-
----
-
-## This manifest deploys a Job which performs one time
-# configuration of Calico
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: configure-calico
-  namespace: kube-system
-  labels:
-    k8s-app: calico
-spec:
-  template:
-    metadata:
-      name: configure-calico
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
-        scheduler.alpha.kubernetes.io/tolerations: |
-          [{"key": "dedicated", "value": "master", "effect": "NoSchedule" },
-           {"key":"CriticalAddonsOnly", "operator":"Exists"}]
-    spec:
-      hostNetwork: true
-      restartPolicy: OnFailure
-      containers:
-        # Writes basic configuration to datastore.
-        - name: configure-calico
-          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/ctl:v1.0.2
-          args:
-          - apply
-          - -f
-          - /etc/config/calico/ippool.yaml
-          volumeMounts:
-            - name: config-volume
-              mountPath: /etc/config
-          env:
-            # The location of the etcd cluster.
-            - name: ETCD_ENDPOINTS
-              valueFrom:
-                configMapKeyRef:
-                  name: calico-config
-                  key: etcd_endpoints
-      volumes:
-       - name: config-volume
-         configMap:
-           name: calico-config
-           items:
-            - key: ippool.yaml
-              path: calico/ippool.yaml

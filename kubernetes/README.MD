@@ -1,26 +1,21 @@
-Your Kubernetes master has initialized successfully!
 
-You should now deploy a pod network to the cluster.
-Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-[http://kubernetes.io/docs/admin/addons/](http://kubernetes.io/docs/admin/addons/)
+## 环境
+os: CentOS Linux release 7.3.1611 (Core)
+kernel: Linux kuben0 3.10.0-514.2.2.el7.x86_64 #1 SMP Tue Dec 6 23:06:41 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
 
-You can now join any number of machines by running the following on each node:
-
-
-## prepare
+## 准备工作
 
 ```sh
 #卸载防火墙
-$ sudo systemctl stop firewalld
-$ sudo systemctl disable firewalld
-$ sudo yum remove -y firewalld
+$ systemctl stop firewalld && sudo systemctl disable firewalld
+$ yum remove -y firewalld
 
 #内核参数设置
-$ sudo setenforce 0 && sysctl -w vm.max_map_count=262144
+$ setenforce 0 && sysctl -w vm.max_map_count=262144
 
 #更改镜像为阿里镜像
-$ sudo mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
-$ sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+$ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+$ curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
 #添加kubernetes镜像
 $ cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -39,26 +34,25 @@ enabled=1
 gpgcheck=0
 repo_gpgcheck=0
 EOF
-$ setenforce 0
 
-#安装指定版本的docker
+#安装指定版本的docker-1.12.5
 $ yum install -y docker-engine-selinux-1.12.5-1.el7.centos.noarch docker-engine-1.12.5-1.el7.centos.x86_64 
-$ sudo yum install -y kubelet kubeadm kubectl kubernetes-cni
-$ sudo systemctl enable docker && systemctl start docker
-$ sudo systemctl enable kubelet && systemctl start kubelet
+$ yum install -y kubelet kubeadm kubectl kubernetes-cni
+$ systemctl enable docker && systemctl start docker
+$ systemctl enable kubelet && systemctl start kubelet
 
 # 配置镜像加速
-$ sudo tee /etc/docker/daemon.json <<-'EOF'
+$ tee /etc/docker/daemon.json <<-'EOF'
 {
     "registry-mirrors": ["https://dqwotnqy.mirror.aliyuncs.com","http://095bbdcd.m.daocloud.io"]
 }
 EOF
 #重启docker
-$ sudo systemctl restart docker
+$ systemctl restart docker
 $ docker info
 
 #配置docker日志自动归档
-$ sudo tee /etc/logrotate.d/docker <<-'EOF'
+$ tee /etc/logrotate.d/docker <<-'EOF'
 /var/lib/docker/containers/*/*.log
 {
     size    50M
@@ -89,24 +83,23 @@ done
 
 $ kubeadm init  --use-kubernetes-version $kube_version
 
-#配置网络
-#测试：直接使用weavenet
+#配置网络CNI
+#测试环境：直接使用weavenet
 $ kubectl apply -f https://git.io/weave-kube
 
-#生产: 使用calico
+#生产环境: 使用calico
 $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/addon/calico/calico.yaml
 
+#安装dashboard
 $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/google_containers/kubernetes-dashboard.yaml
 ```
-
-
 
 
 
 ## node
 
 ```sh
-$ nfs-utils
+$ yum install -y nfs-utils
 
 $ images=(kube-proxy-amd64:v1.5.1 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
@@ -122,7 +115,7 @@ $ kubeadm join --token=xxxxxxxxxxxxx xxx.xxx.xxx.xxx
 
 ## FAQ
 
-###networks have same bridge name
+### networks have same bridge name
 
 > ```sh
 > ip link del docker0 && rm -rf /var/docker/network/* && mkdir -p /var/docker/network/files

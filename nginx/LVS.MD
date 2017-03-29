@@ -51,6 +51,7 @@ client[client] --> VIP{192.168.3.66}
 ```sh
 $ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 $ yum install -y ipvsadm keepalived
+$ systemctl enable keepalived
 ```
 
 
@@ -99,13 +100,19 @@ vrrp_instance VI_1 {
 virtual_server 192.168.3.66 80 {
 	#检查真实服务器时间，单位秒
     delay_loop 6
-    #设置负载调度算法(rr|wrr|lc|wlc|lblc)
-    ##rr: 轮训
-    ##wrr: 加权轮叫
-    ##lc: 最少链接
-    ##wlc: 加权最少链接
-    ##lblc: 基于局部性的最少链接
-    lb_algo rr
+    #设置负载调度算法(rr|wrr|lc|wlc|lblc|dh|sh)
+    ##rr: 轮叫调度(Round Robin，RR)
+    ##wrr: 加权轮叫(Weighted Round Robin，WRR)
+    ##dh: 目标地址散列(Destination Hashing,DH)
+    ##sh: 源地址散列(Source Hashing,SH)
+    
+    ##lc: 最少链接(Least Connections，LC)
+    ##wlc:  加权最少链接(Weighted Least Connections，WLC)
+    ##lblc: 基于局部性的最少链接(Locality-Based Least Connections，LBLC)
+    ##lblcr: 带复制的基于局部性最少链接(Locality-Based Least Connections with Replication，LBLCR)
+    ##sed: 最短的期望的延迟（Shortest Expected Delay Scheduling，SED）
+    ##nq: 最少队列（Never Queue Scheduling，NQ）
+    lb_algo sh
     
     #设置LVS负载均衡DR模式(DR|NAT|tun)
     lb_kind DR
@@ -149,7 +156,6 @@ virtual_server 192.168.3.66 80 {
 }
 
 EOF
-
 ```
 
 

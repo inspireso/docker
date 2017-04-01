@@ -35,16 +35,14 @@ spec:
         app: kubernetes-dashboard
       # Comment the following annotation if Dashboard must not be deployed on master
       annotations:
-        scheduler.alpha.kubernetes.io/tolerations: |
-          [
-            {
-              "key": "dedicated",
-              "operator": "Equal",
-              "value": "master",
-              "effect": "NoSchedule"
-            }
-          ]
+        scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
+      # Only run this pod on the master.
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
       containers:
       - name: kubernetes-dashboard
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/kubernetes-dashboard-amd64:v1.6.0

@@ -52,6 +52,9 @@ client[client] --> VIP{192.168.3.66}
 $ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 $ yum install -y ipvsadm keepalived
 $ systemctl enable keepalived
+#开放80端口
+$ firewall-cmd --zone=public --add-port=80/tcp --permanent
+$ systemctl restart firewalld
 ```
 
 
@@ -171,8 +174,10 @@ $ systemctl enable keepalived && systemctl restart keepalived
 ## nginx节点
 
 ```sh
+#开放80端口
+$ firewall-cmd --zone=public --add-port=80/tcp --permanent
+$ systemctl restart firewalld
 $ yum install net-tools
-
 $ echo <<EOF > /etc/init.d/real.sh
 #!/bin/bash
 
@@ -213,6 +218,5 @@ $ /etc/init.d/real.sh start
 $ echo "/etc/init.d/real.sh start" >> /etc/rc.d/rc.local
 $ chmod +x /etc/rc.d/rc.local
 $ systemctl enable rc-local && systemctl start rc-local.service
-
 ```
 

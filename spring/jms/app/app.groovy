@@ -29,7 +29,7 @@ import java.sql.SQLException
 class JmsInfluxDBConfiguration {
     final Logger logger = LoggerFactory.getLogger(JmsInfluxDBConfiguration.class);
     final String JMS_QUEUES_TABLES_FORMAT = "SELECT OWNER, OBJECT_NAME FROM DBA_OBJECTS  WHERE OBJECT_TYPE='TABLE' AND OBJECT_NAME like :name AND OWNER = :owner";
-    final String JMS_CHECK_SQL_FORMAT = "SELECT COUNT(1) FROM %s WHERE RETRY_COUNT < 5"
+    final String JMS_CHECK_SQL_FORMAT = "SELECT COUNT(1) FROM %s WHERE RETRY_COUNT < 5 AND ENQ_TIME < SYSDATE-(5/24/60)"
     org.influxdb.InfluxDB influxDB
 
     @Value('${ips.apm.influxdb.dbname:jms}')

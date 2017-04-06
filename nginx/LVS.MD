@@ -49,12 +49,25 @@ client[client] --> VIP{192.168.3.66}
 ### 安装keepalive+lvs
 
 ```sh
+#卸载firewalld
+$ systemctl disable firewalld && yum remove -y firewalld
+#安装iptables
+$ yum install iptables-services
+$ vi /etc/sysconfig/iptables
+# 允许vrrp协议
+# master(192.168.3.60)添加如下规则
+-A INPUT -s 192.168.3.61/32 -i eno16777984 -p vrrp -j ACCEPT
+# backup(192.168.3.61)添加如下规则
+-A INPUT -s 192.168.3.60/32 -i eno16777984 -p vrrp -j ACCEPT
+#允许访问80，443
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+#启动iptables防火墙
+$ systemctl enable iptables.service && systemctl restart iptables.service
+
 $ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 $ yum install -y ipvsadm keepalived
 $ systemctl enable keepalived
-#开放80端口
-$ firewall-cmd --zone=public --add-port=80/tcp --permanent
-$ systemctl restart firewalld
 ```
 
 

@@ -6,8 +6,8 @@ set -e
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
 
 mkdir -p "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
-chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
-chown -R grafana:grafana /etc/grafana
+#chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
+#chown -R grafana:grafana /etc/grafana
 
 exec gosu grafana /usr/sbin/grafana-server      \
   --homepath=/usr/share/grafana                 \

@@ -5,6 +5,9 @@ ARG group=grafana
 ARG uid=1002
 ARG gid=1002
 
+ENV GRAFANA_USER root
+ENV GRAFANA_GROUP root
+
 RUN groupadd -g ${gid} ${group} \
     && useradd -d "/usr/share/grafana" -u ${uid} -g ${gid} -m -s /bin/false ${user}
 

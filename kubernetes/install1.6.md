@@ -1,13 +1,7 @@
-# kubernetes1.5集群部署
-
-
 
 ## 环境
-
 os: CentOS Linux release 7.3.1611 (Core)
 kernel: Linux kuben0 3.10.0-514.2.2.el7.x86_64 #1 SMP Tue Dec 6 23:06:41 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-
-
 
 ## 准备工作(kubernetes1.5)
 
@@ -77,6 +71,14 @@ EOF
 
 
 
+## kubernetes1.6
+
+```sh
+$ echo 1 >  /proc/sys/net/bridge/bridge-nf-call-iptables
+```
+
+
+
 ## master
 
 ```sh
@@ -109,7 +111,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes
 ```sh
 $ yum install -y nfs-utils
 
-$ images=(kube-proxy-amd64:v1.5.3 pause-amd64:3.0)
+$ images=(kube-proxy-amd64:v1.5.1 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName

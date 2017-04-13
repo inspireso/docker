@@ -9,7 +9,7 @@ kernel: Linux kuben0 3.10.0-514.2.2.el7.x86_64 #1 SMP Tue Dec 6 23:06:41 UTC 201
 
 
 
-## 准备工作(kubernetes1.5)
+## 准备工作
 
 ```sh
 #卸载防火墙
@@ -77,7 +77,7 @@ EOF
 
 
 
-## master
+## master节点
 
 ```sh
 #下载镜像
@@ -93,18 +93,18 @@ $ kubeadm init  --use-kubernetes-version $kube_version
 
 #配置网络CNI
 #测试环境：直接使用weavenet
-$ kubectl apply -f https://git.io/weave-kube
+$ kubectl apply -f https://github.com/inspireso/docker/blob/kubernetes-v1.5.3/kubernetes/addon/weave/weave-daemonset.yaml
 
 #生产环境: 使用calico
-$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/addon/calico/calico.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes-v1.5.3/kubernetes/addon/calico/calico.yaml
 
 #安装dashboard
-$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/google_containers/kubernetes-dashboard.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes-v1.5.3/kubernetes/google_containers/kubernetes-dashboard.yaml
 ```
 
 
 
-## node
+## node节点
 
 ```sh
 $ yum install -y nfs-utils

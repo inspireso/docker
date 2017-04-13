@@ -1,14 +1,19 @@
+# kubernetes1.6集群部署
+
+
 
 ## 环境
+
 os: CentOS Linux release 7.3.1611 (Core)
 kernel: Linux kuben0 3.10.0-514.2.2.el7.x86_64 #1 SMP Tue Dec 6 23:06:41 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
 
-## 准备工作(kubernetes1.5)
+## 准备工作
 
 ```sh
 #卸载防火墙
 $ systemctl stop firewalld && sudo systemctl disable firewalld
 $ yum remove -y firewalld
+$ echo 1 >  /proc/sys/net/bridge/bridge-nf-call-iptables
 
 #内核参数设置
 $ setenforce 0 && sysctl -w vm.max_map_count=262144
@@ -71,20 +76,12 @@ EOF
 
 
 
-## kubernetes1.6
-
-```sh
-$ echo 1 >  /proc/sys/net/bridge/bridge-nf-call-iptables
-```
-
-
-
 ## master
 
 ```sh
 #下载镜像
-$ kube_version=v1.5.3
-$ images=(kube-proxy-amd64:$kube_version kube-scheduler-amd64:$kube_version kube-controller-manager-amd64:$kube_version kube-apiserver-amd64:$kube_version etcd-amd64:3.0.14-kubeadm kube-dnsmasq-amd64:1.4 exechealthz-amd64:1.2 pause-amd64:3.0 dnsmasq-metrics-amd64:1.0 kube-discovery-amd64:1.0 kubedns-amd64:1.9)
+$ kube_version=v1.6.0
+$ images=(kube-proxy-amd64:$kube_version kube-scheduler-amd64:$kube_version kube-controller-manager-amd64:$kube_version kube-apiserver-amd64:$kube_version etcd-amd64:3.0.17  pause-amd64:3.0 k8s-dns-sidecar-amd64:1.14.1  k8s-dns-kube-dns-amd64:1.14.1 k8s-dns-dnsmasq-nanny-amd64:1.14.1)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName
@@ -98,7 +95,7 @@ $ kubeadm init  --use-kubernetes-version $kube_version
 $ kubectl apply -f https://git.io/weave-kube
 
 #生产环境: 使用calico
-$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/addon/calico/calico.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/addon/calico/calico1.6.yaml
 
 #安装dashboard
 $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes/kubernetes/google_containers/kubernetes-dashboard.yaml
@@ -111,7 +108,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes
 ```sh
 $ yum install -y nfs-utils
 
-$ images=(kube-proxy-amd64:v1.5.1 pause-amd64:3.0)
+$ images=(kube-proxy-amd64:v1.6.0 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName

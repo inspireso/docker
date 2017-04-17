@@ -1,4 +1,4 @@
-FROM inspireso/java:8:jre-alpine
+FROM inspireso/java:8-jre-alpine
 
 ARG NEXUS_VERSION=3.3.0-01
 ARG NEXUS_DOWNLOAD_URL=https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz

@@ -88,7 +88,8 @@ for imageName in ${images[@]} ; do
   docker rmi registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
 done
 
-$ kubeadm init  --use-kubernetes-version $kube_version
+$ kubeadm init  --kubernetes-version $kube_version
+kubeadm join --token c70699.1d8a27638d7ad2be 192.168.8.12:6443
 
 #配置网络CNI
 #测试环境：直接使用weavenet

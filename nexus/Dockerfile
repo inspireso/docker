@@ -6,11 +6,11 @@ ARG NEXUS_DOWNLOAD_URL=https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSI
 
 # configure nexus runtime
 ENV SONATYPE_DIR=/opt/sonatype
-ENV NEXUS_HOME=${SONATYPE_DIR}/nexus \
-  NEXUS_DATA=/nexus-data \
-  NEXUS_CONTEXT='' \
-  SONATYPE_WORK=${SONATYPE_DIR}/sonatype-work \
-  INSTALL4J_ADD_VM_PARAMS="-Xms1200m -Xmx1200m"
+ENV NEXUS_HOME=${SONATYPE_DIR}/nexus
+ENV NEXUS_DATA=/nexus-data
+ENV NEXUS_CONTEXT=''
+ENV SONATYPE_WORK=${SONATYPE_DIR}/sonatype-work
+ENV INSTALL4J_ADD_VM_PARAMS="-Xms1200m -Xmx1200m"
 
 # install nexus
 RUN apk add --no-cache openssl \

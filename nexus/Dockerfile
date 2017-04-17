@@ -15,9 +15,9 @@ ENV SONATYPE_DIR=/opt/sonatype \
 # install nexus
 RUN apk add --no-cache openssl && \
     apk add --no-cache --virtual=build-deps wget ca-certificates unzip && \
-    mkdir -p ${SONATYPE_DIR} && \
+    mkdir -p "${SONATYPE_DIR}" && \
+    cd "${SONATYPE_DIR}" && \
     wget ${NEXUS_DOWNLOAD_URL} -O - | tar zx -C "${SONATYPE_DIR}" && \
-    mv "${SONATYPE_DIR}/nexus-${NEXUS_VERSION}" "${NEXUS_HOME}" && \
     mkdir -p "${NEXUS_DATA}/etc" "${NEXUS_DATA}/log" "${NEXUS_DATA}/tmp" "${SONATYPE_WORK}" && \
     ln -s ${NEXUS_DATA} ${SONATYPE_WORK}/nexus3 && \
     apk del build-deps && \

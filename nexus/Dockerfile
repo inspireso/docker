@@ -13,15 +13,15 @@ ENV SONATYPE_WORK $SONATYPE_DIR/sonatype-work
 ENV INSTALL4J_ADD_VM_PARAMS "-Xms1200m -Xmx1200m"
 
 # install nexus
-RUN apk add --no-cache openssl && \
-    apk add --no-cache --virtual=build-deps wget ca-certificates && \
-    mkdir -p $SONATYPE_DIR && \
-    cd $SONATYPE_DIR && \
-    wget $NEXUS_DOWNLOAD_URL -O - | tar zx -C $SONATYPE_DIR && \
-    mv $SONATYPE_DIR/nexus-$NEXUS_VERSION $NEXUS_HOME && \
-    mkdir -p $NEXUS_DATA/etc $NEXUS_DATA/log $NEXUS_DATA/tmp && \
-    mkdir -p $SONATYPE_WORK && \
-    ln -s $NEXUS_DATA $SONATYPE_WORK/nexus3 && \
+RUN apk add --no-cache openssl \
+    && apk add --no-cache --virtual=build-deps wget ca-certificates \
+    && mkdir -p $SONATYPE_DIR \
+    && wget $NEXUS_DOWNLOAD_URL -O - | tar zx -C $SONATYPE_DIR \
+    && mv $SONATYPE_DIR/nexus-$NEXUS_VERSION $NEXUS_HOME \
+    && mkdir -p $NEXUS_DATA/etc $NEXUS_DATA/log $NEXUS_DATA/tmp \
+    && rm -rf $SONATYPE_WORK
+    && mkdir -p $SONATYPE_WORK \
+    && ln -s /nexus-data $SONATYPE_WORK/nexus3 \
     apk del build-deps && \
     rm -rf /var/cache/apk/* &&\
     rm -rf /tmp/*

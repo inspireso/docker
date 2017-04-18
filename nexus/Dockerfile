@@ -22,9 +22,9 @@ RUN apk add --no-cache openssl \
     && rm -rf $SONATYPE_WORK
     && mkdir -p $SONATYPE_WORK \
     && ln -s /nexus-data $SONATYPE_WORK/nexus3 \
-    apk del build-deps && \
-    rm -rf /var/cache/apk/* &&\
-    rm -rf /tmp/*
+    && apk del build-deps \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/*
 
 # configure nexus
 RUN sed \

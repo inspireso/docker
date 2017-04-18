@@ -5,22 +5,23 @@ ARG NEXUS_DOWNLOAD_URL=https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSI
 
 
 # configure nexus runtime
-ENV SONATYPE_DIR=/opt/sonatype
-ENV NEXUS_HOME=${SONATYPE_DIR}/nexus
-ENV NEXUS_DATA=/nexus-data
-ENV NEXUS_CONTEXT=''
-ENV SONATYPE_WORK=${SONATYPE_DIR}/sonatype-work
-ENV INSTALL4J_ADD_VM_PARAMS="-Xms1200m -Xmx1200m"
+ENV SONATYPE_DIR /opt/sonatype
+ENV NEXUS_HOME $SONATYPE_DIR/nexus
+ENV NEXUS_DATA /nexus-data
+ENV NEXUS_CONTEXT ''
+ENV SONATYPE_WORK $SONATYPE_DIR/sonatype-work
+ENV INSTALL4J_ADD_VM_PARAMS "-Xms1200m -Xmx1200m"
 
 # install nexus
 RUN apk add --no-cache openssl && \
     apk add --no-cache --virtual=build-deps wget ca-certificates && \
-    mkdir -p "${SONATYPE_DIR}" && \
-    cd "${SONATYPE_DIR}" && \
-    wget ${NEXUS_DOWNLOAD_URL} -O - | tar zx -C "${SONATYPE_DIR}" && \
-    mv "${SONATYPE_DIR}/nexus-${NEXUS_VERSION}" "${NEXUS_HOME}" && \
-    mkdir -p "${NEXUS_DATA}/etc" "${NEXUS_DATA}/log" "${NEXUS_DATA}/tmp" "${SONATYPE_WORK}" && \
-    ln -s "${NEXUS_DATA}" "${SONATYPE_WORK}/nexus3" && \
+    mkdir -p $SONATYPE_DIR && \
+    cd $SONATYPE_DIR && \
+    wget $NEXUS_DOWNLOAD_URL -O - | tar zx -C $SONATYPE_DIR && \
+    mv $SONATYPE_DIR/nexus-$NEXUS_VERSION $NEXUS_HOME && \
+    mkdir -p $NEXUS_DATA/etc $NEXUS_DATA/log $NEXUS_DATA/tmp && \
+    mkdir -p $SONATYPE_WORK && \
+    ln -s $NEXUS_DATA $SONATYPE_WORK/nexus3 && \
     apk del build-deps && \
     rm -rf /var/cache/apk/* &&\
     rm -rf /tmp/*

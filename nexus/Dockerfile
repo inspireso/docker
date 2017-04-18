@@ -4,11 +4,11 @@ ARG NEXUS_VERSION=3.3.0-01
 ARG NEXUS_DOWNLOAD_URL=https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz
 
 # configure nexus runtime
-ENV SONATYPE_DIR=/opt/sonatype \
-    NEXUS_HOME=$SONATYPE_DIR/nexus \
-    NEXUS_DATA=/nexus-data \
+ENV SONATYPE_DIR="/opt/sonatype" \
+    NEXUS_HOME="$SONATYPE_DIR/nexus" \
+    NEXUS_DATA="/nexus-data" \
     NEXUS_CONTEXT='' \
-    SONATYPE_WORK=$SONATYPE_DIR/sonatype-work \
+    SONATYPE_WORK="$SONATYPE_DIR/sonatype-work" \
     INSTALL4J_ADD_VM_PARAMS="-Xms1200m -Xmx1200m"
 
 # install nexus

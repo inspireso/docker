@@ -18,11 +18,10 @@ $ echo 1 >  /proc/sys/net/bridge/bridge-nf-call-iptables
 #内核参数设置
 $ setenforce 0
 $ echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-$ echo "net.ipv4.conf.all.rp_filter = 2" >> /etc/sysctl.conf
-$ echo "net.ipv4.conf.all.arp_ignore = 1" >> /etc/sysctl.conf
-$ echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
 $ echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
 $ echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+$ echo "net.netfilter.nf_conntrack_max=1000000" >> /etc/sysctl.conf
+$ echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
 $ systcl -p
 
 #更改镜像为阿里镜像
@@ -87,7 +86,7 @@ EOF
 
 ```sh
 #下载镜像
-$ kube_version=v1.6.1
+$ kube_version=v1.6.2
 $ images=(kube-proxy-amd64:$kube_version kube-scheduler-amd64:$kube_version kube-controller-manager-amd64:$kube_version kube-apiserver-amd64:$kube_version etcd-amd64:3.0.17  pause-amd64:3.0 k8s-dns-sidecar-amd64:1.14.1  k8s-dns-kube-dns-amd64:1.14.1 k8s-dns-dnsmasq-nanny-amd64:1.14.1)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
@@ -96,7 +95,6 @@ for imageName in ${images[@]} ; do
 done
 
 $ kubeadm init  --pod-network-cidr="10.1.0.0/16" --kubernetes-version=$kube_version
-kubeadm join --token c54723.59270198b5b19666 192.168.3.50:6443
 
 #配置网络CNI
 #测试环境：直接使用weavenet
@@ -116,7 +114,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes
 ```sh
 $ yum install -y nfs-utils
 
-$ images=(kube-proxy-amd64:v1.6.1 pause-amd64:3.0)
+$ images=(kube-proxy-amd64:v1.6.2 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName

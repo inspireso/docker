@@ -25,23 +25,27 @@ kind: Deployment
 metadata:
   name: heapster
   namespace: kube-system
+  labels:
+    task: monitoring
+    app: heapster
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         task: monitoring
-        k8s-app: heapster
+        app: heapster
     spec:
       serviceAccountName: heapster
       containers:
       - name: heapster
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers:latest
-        imagePullPolicy: IfNotPresent
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest
+        imagePullPolicy: Always
         command:
         - /heapster
         - --source=kubernetes:https://kubernetes.default
-        - --sink=influxdb:http://monitoring-influxdb:8086
+        - --sink=influxdb:http://influxdb:8086
+
 ---
 apiVersion: v1
 kind: Service
@@ -59,5 +63,4 @@ spec:
   - port: 80
     targetPort: 8082
   selector:
-    k8s-app: heapster
-
+    app: heapster

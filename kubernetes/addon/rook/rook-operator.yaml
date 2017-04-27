@@ -84,7 +84,7 @@ spec:
       serviceAccountName: rook-operator
       containers:
       - name: rook-operator
-        image: registry.cn-hangzhou.aliyuncs.com/rook/rookd:master-latest
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/rookd:latest
         args: ["operator"]
         env:
         - name: ROOKD_REPO_PREFIX

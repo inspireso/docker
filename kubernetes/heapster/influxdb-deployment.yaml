@@ -16,8 +16,7 @@ spec:
     spec:
       volumes:
       - name: data
-        persistentVolumeClaim:
-          claimName: nfs-pvc
+        emptyDir: {}
       containers:
       - name: influxdb
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb:latest

@@ -12,19 +12,19 @@ spec:
     securityContext:
       privileged: true
     volumeMounts:
-        - mountPath: /dev
-          name: dev
-        - mountPath: /sys
-          name: sys
-        - mountPath: /lib/modules
-          name: libmodules
+    - mountPath: /dev
+      name: dev
+    - mountPath: /sys
+      name: sys
+    - mountPath: /lib/modules
+      name: libmodules
   volumes:
-      - name: dev
-        hostPath:
-          path: /dev
-      - name: sys
-        hostPath:
-          path: /sys
-      - name: libmodules
-        hostPath:
-          path: /lib/modules
+  - name: dev
+    hostPath:
+      path: /dev
+  - name: sys
+    hostPath:
+      path: /sys
+  - name: libmodules
+    hostPath:
+      path: /lib/modules

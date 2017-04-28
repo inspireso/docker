@@ -7,7 +7,7 @@ spec:
   containers:
   - name: rook-client
     image: registry.cn-hangzhou.aliyuncs.com/kube_containers/rook-client:latest
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     command: ["sleep", "36500d"]
     securityContext:
       privileged: true

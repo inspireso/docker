@@ -127,7 +127,7 @@ $ kubeadm join --token=xxxxxxxxxxxxx xxx.xxx.xxx.xxx
 > ip link del docker0 && rm -rf /var/docker/network/* && mkdir -p /var/docker/network/files
 > systemctl start docker
 > # delete all containers
-> docker ps -a | cut -d' ' -f 1 | xargs -n 1 echo docker rm  -f
+> docker rm -f $(docker ps -a -q)
 > ```
 
 ### master node->work load

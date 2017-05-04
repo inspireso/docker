@@ -7,7 +7,7 @@ spec:
   containers:
   - name: rook-tools
     image: registry.cn-hangzhou.aliyuncs.com/kube_containers/rook-toolbox:latest
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     args: ["sleep", "36500d"]
     env:
     - name: ROOKD_ADMIN_SECRET

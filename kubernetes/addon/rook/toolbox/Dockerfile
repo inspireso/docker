@@ -1,1 +1,1 @@
-FROM quay.io/rook/toolbox:latest
+FROM quay.io/rook/toolbox:master-latest

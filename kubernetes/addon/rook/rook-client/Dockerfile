@@ -1,1 +1,1 @@
-FROM quay.io/rook/rook-client:latest
+FROM quay.io/rook/rook-client:master-latest

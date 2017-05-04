@@ -13,7 +13,6 @@ kernel: Linux kuben0 3.10.0-514.2.2.el7.x86_64 #1 SMP Tue Dec 6 23:06:41 UTC 201
 #卸载防火墙
 $ systemctl stop firewalld && sudo systemctl disable firewalld
 $ yum remove -y firewalld
-$ echo 1 >  /proc/sys/net/bridge/bridge-nf-call-iptables
 
 #内核参数设置
 $ setenforce 0
@@ -22,7 +21,7 @@ $ echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
 $ echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
 $ echo "net.netfilter.nf_conntrack_max=1000000" >> /etc/sysctl.conf
 $ echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
-$ systcl -p
+$ sysctl -p
 
 #更改镜像为阿里镜像
 $ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
@@ -47,10 +46,11 @@ repo_gpgcheck=0
 EOF
 
 #安装指定版本的docker-1.12.6
-$ yum install -y docker-engine-selinux-1.12.6-1.el7.centos.noarch docker-engine-1.12.6-1.el7.centos.x86_64 
+$ yum install -y yum-versionlock docker-engine-selinux-1.12.6-1.el7.centos.noarch docker-engine-1.12.6-1.el7.centos.x86_64 
+$ yum versionlock add docker-engine-selinux docker-engine
 
 #安装kubernetes组件
-$ yum install -y kubelet kubeadm kubectl kubernetes-cni
+$ yum install -y  kubelet-1.6.1-0 kubectl-1.6.1-0 kubeadm-1.6.1-0 kubernetes-cni
 $ systemctl enable docker && systemctl start docker
 $ systemctl enable kubelet && systemctl start kubelet
 

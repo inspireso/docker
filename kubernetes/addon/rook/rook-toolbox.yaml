@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
   - name: rook-tools
-    image: registry.cn-hangzhou.aliyuncs.com/kube_containers:latest
+    image: registry.cn-hangzhou.aliyuncs.com/kube_containers/toolbox:latest
     imagePullPolicy: Always
     args: ["sleep", "36500d"]
     env:

@@ -6,8 +6,8 @@ metadata:
 spec:
   containers:
   - name: rook-tools
-    image: quay.io/rook/toolbox:master-latest
-    imagePullPolicy: IfNotPresent
+    image: registry.cn-hangzhou.aliyuncs.com/kube_containers:latest
+    imagePullPolicy: Always
     args: ["sleep", "36500d"]
     env:
     - name: ROOKD_ADMIN_SECRET

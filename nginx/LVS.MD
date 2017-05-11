@@ -42,6 +42,12 @@ client[client] --> VIP{192.168.3.66}
 
 **负载均衡模式：DR（直接路由）**
 
+## 更改镜像(所有节点)
+
+```sh
+$ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+```
+
 
 
 ## LVS节点
@@ -49,23 +55,7 @@ client[client] --> VIP{192.168.3.66}
 ### 安装keepalive+lvs
 
 ```sh
-#卸载firewalld
-$ systemctl disable firewalld && yum remove -y firewalld
-#安装iptables
-$ yum install iptables-services
-$ vi /etc/sysconfig/iptables
-# 允许vrrp协议
-# master(192.168.3.60)添加如下规则
--A INPUT -s 192.168.3.61/32 -i eno16777984 -p vrrp -j ACCEPT
-# backup(192.168.3.61)添加如下规则
--A INPUT -s 192.168.3.60/32 -i eno16777984 -p vrrp -j ACCEPT
-#允许访问80，443
--A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
--A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
-#启动iptables防火墙
-$ systemctl enable iptables.service && systemctl restart iptables.service
-
-$ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+#安装keepalived
 $ yum install -y ipvsadm keepalived
 $ systemctl enable keepalived
 ```
@@ -122,7 +112,8 @@ virtual_server 192.168.3.66 80 {
     ##dh: 目标地址散列(Destination Hashing,DH)
     ##sh: 源地址散列(Source Hashing,SH)
     
-    ##lc: 最少链接(Least Connections，LC)
+    ##
+    : 最少链接(Least Connections，LC)
     ##wlc:  加权最少链接(Weighted Least Connections，WLC)
     ##lblc: 基于局部性的最少链接(Locality-Based Least Connections，LBLC)
     ##lblcr: 带复制的基于局部性最少链接(Locality-Based Least Connections with Replication，LBLCR)
@@ -184,6 +175,42 @@ $ systemctl enable keepalived && systemctl restart keepalived
 
 
 
+### 防火墙配置
+
+```sh
+#卸载firewalld
+$ systemctl disable firewalld && yum remove -y firewalld
+#安装iptables
+$ yum install -y iptables-services
+
+#配置防火墙参考
+$ vi /etc/sysconfig/iptables
+#默认禁止访问
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+# 允许vrrp协议
+# master(192.168.3.60)添加如下规则
+-A INPUT -s 192.168.3.61/24 -i eno16777984 -p vrrp -j ACCEPT
+# backup(192.168.3.61)添加如下规则
+-A INPUT -s 192.168.3.60/24 -i eno16777984 -p vrrp -j ACCEPT
+#允许ssh
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+#允许访问80，443
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+
+#配置默认启动iptables并重启iptables防火墙
+$ systemctl enable iptables.service && systemctl restart iptables.service
+```
+
+
+
 ## nginx节点
 
 ```sh
@@ -231,5 +258,34 @@ $ /etc/init.d/real.sh start
 $ echo "/etc/init.d/real.sh start" >> /etc/rc.d/rc.local
 $ chmod +x /etc/rc.d/rc.local
 $ systemctl enable rc-local && systemctl start rc-local.service
+```
+
+### 防火墙配置
+
+```sh
+#卸载firewalld
+$ systemctl disable firewalld && yum remove -y firewalld
+#安装iptables
+$ yum install -y iptables-services
+
+#配置防火墙参考
+$ vi /etc/sysconfig/iptables
+#默认禁止访问
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#允许ssh
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+#允许访问80，443
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+
+#配置默认启动iptables并重启iptables防火墙
+$ systemctl enable iptables.service && systemctl restart iptables.service
 ```
 

@@ -23,7 +23,7 @@ $ echo "net.ipv4.conf.all.arp_ignore = 1" >> /etc/sysctl.conf
 $ echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
 $ echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
 $ echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
-$ systcl -p
+$ sysctl -p
 
 #更改镜像为阿里镜像
 $ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak

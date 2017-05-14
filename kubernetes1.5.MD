@@ -12,6 +12,13 @@ $ yum remove -y firewalld
 
 #内核参数设置
 $ setenforce 0 && sysctl -w vm.max_map_count=262144
+$ echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+$ echo "net.ipv4.conf.all.rp_filter = 2" >> /etc/sysctl.conf
+$ echo "net.ipv4.conf.all.arp_ignore = 1" >> /etc/sysctl.conf
+$ echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
+$ echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
+$ echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+$ sysctl -p
 
 #更改镜像为阿里镜像
 $ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak

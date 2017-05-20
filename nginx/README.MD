@@ -14,9 +14,10 @@ $ ./configure  \
   	--lock-path=/var/run/nginx.lock \
   	--http-client-body-temp-path=/var/cache/nginx/client_temp \
   	--http-proxy-temp-path=/var/cache/nginx/proxy_temp \
-    --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
-    --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-    --http-scgi-temp-path=/var/cache/nginx/scgi_temp
+    	--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+    	--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+    	--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
+	--with-http_v2_module 
 $ make
 $ make install
 $ ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/nginx

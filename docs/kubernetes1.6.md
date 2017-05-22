@@ -50,7 +50,7 @@ $ yum install -y yum-versionlock docker-engine-selinux-1.12.6-1.el7.centos.noarc
 $ yum versionlock add docker-engine-selinux docker-engine
 
 #安装kubernetes组件
-$ yum install -y  kubelet-1.6.1-0 kubectl-1.6.1-0 kubeadm-1.6.1-0 kubernetes-cni
+$ yum install -y  kubelet-1.6.3-0 kubectl-1.6.3-0 kubeadm-1.6.3-0 kubernetes-cni
 $ systemctl enable docker && systemctl start docker
 $ systemctl enable kubelet && systemctl start kubelet
 

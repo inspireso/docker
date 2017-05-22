@@ -5,7 +5,7 @@ metadata:
   namespace: rook
 spec:
   versionTag: latest
-  dataDirHostPath: /rook
+  dataDirHostPath: /data/rook
   storage:                # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: false

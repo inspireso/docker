@@ -99,8 +99,8 @@ spec:
       serviceAccountName: rook-operator
       containers:
       - name: rook-operator
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/rookd:latest
+        image: inspireso/rookd:latest
         args: ["operator"]
         env:
         - name: ROOKD_REPO_PREFIX
-          value: registry.cn-hangzhou.aliyuncs.com/kube_containers
+          value: inspireso

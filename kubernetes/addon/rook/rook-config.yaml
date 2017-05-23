@@ -1,9 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rook-config
+  name: rook-config-override
+  namespace: rook
 data:
   ceph.conf: |
     [global]
     osd crush update on start = false
-    osd pool default size     = 3
+    osd pool default size     = 2
+    osd pool default pg num   = 256

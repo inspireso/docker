@@ -86,7 +86,7 @@ EOF
 
 ```sh
 #下载镜像
-$ kube_version=v1.6.2
+$ kube_version=v1.6.3
 $ images=(kube-proxy-amd64:$kube_version kube-scheduler-amd64:$kube_version kube-controller-manager-amd64:$kube_version kube-apiserver-amd64:$kube_version etcd-amd64:3.0.17  pause-amd64:3.0 k8s-dns-sidecar-amd64:1.14.1  k8s-dns-kube-dns-amd64:1.14.1 k8s-dns-dnsmasq-nanny-amd64:1.14.1)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
@@ -114,7 +114,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes
 ```sh
 $ yum install -y nfs-utils
 
-$ images=(kube-proxy-amd64:v1.6.2 pause-amd64:3.0)
+$ images=(kube-proxy-amd64:v1.6.3 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName
@@ -150,4 +150,15 @@ $ kubeadm join --token=xxxxxxxxxxxxx xxx.xxx.xxx.xxx
 >```sh
 >$ kubectl taint nodes kuben0 dedicated=master:NoSchedule
 >```
+
+
+
+### reset
+
+>```sh
+>$ kubeadm reset
+>$ rm /var/etcd/ -rf
+>$ docker rm -f $(docker ps -a -q)
+>```
+
 

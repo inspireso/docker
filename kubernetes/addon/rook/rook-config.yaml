@@ -4,7 +4,7 @@ metadata:
   name: rook-config-override
   namespace: rook
 data:
-  ceph.conf: |
+  config: |
     [global]
     osd crush update on start = false
     osd pool default size     = 2

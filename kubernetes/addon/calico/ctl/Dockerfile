@@ -1,1 +1,0 @@
-FROM calico/ctl:v1.1.3

@@ -1,3 +1,11 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: rook
+  labels:
+    name: rook
+
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:

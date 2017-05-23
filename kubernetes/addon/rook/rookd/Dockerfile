@@ -1,1 +1,1 @@
-FROM quay.io/rook/rookd:beta-latest
+FROM quay.io/rook/rookd:master-latest

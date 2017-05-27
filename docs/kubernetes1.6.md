@@ -86,7 +86,7 @@ EOF
 
 ```sh
 #下载镜像
-$ kube_version=v1.6.3
+$ kube_version=v1.6.4
 $ images=(kube-proxy-amd64:$kube_version kube-scheduler-amd64:$kube_version kube-controller-manager-amd64:$kube_version kube-apiserver-amd64:$kube_version etcd-amd64:3.0.17  pause-amd64:3.0 k8s-dns-sidecar-amd64:1.14.1  k8s-dns-kube-dns-amd64:1.14.1 k8s-dns-dnsmasq-nanny-amd64:1.14.1)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
@@ -130,35 +130,63 @@ $ kubeadm join --token=xxxxxxxxxxxxx xxx.xxx.xxx.xxx
 
 ### networks have same bridge namer
 
-> ```sh
-> ip link del docker0 && rm -rf /var/docker/network/* && mkdir -p /var/docker/network/files
-> systemctl start docker
-> # delete all containers
-> docker rm -f $(docker ps -a -q)
-> ```
+ ```sh
+ ip link del docker0 && rm -rf /var/docker/network/* && mkdir -p /var/docker/network/files
+ systemctl start docker
+ # delete all containers
+ docker rm -f $(docker ps -a -q)
+ ```
 
 ### master node->work load
 
->```sh
->$ kubectl taint nodes --all dedicated-
->```
+```sh
+$ kubectl taint nodes --all dedicated-
+```
 
 
 
 ### node ->  unschedulable
 
->```sh
->$ kubectl taint nodes kuben0 dedicated=master:NoSchedule
->```
+```sh
+$ kubectl taint nodes kuben0 dedicated=master:NoSchedule
+```
 
 
 
 ### reset
+```sh
+$ kubeadm reset
+$ rm /var/etcd/ -rf
+$ docker rm -f $(docker ps -a -q)
+```
 
->```sh
->$ kubeadm reset
->$ rm /var/etcd/ -rf
->$ docker rm -f $(docker ps -a -q)
->```
+### 升级linux内核
 
+```sh
+$ rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org \
+&& rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm \
+&& yum clean all \
+&& yum --enablerepo=elrepo-kernel install kernel-ml \
+&& grub2-set-default 0
+
+# 查看
+$ grub2-editenv list
+
+#查看启动项
+$ awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
+
+#查看已经安装的内核
+$ rpm -qa | grep kernel
+```
+
+### OverlayFS
+
+```sh
+$ echo "overlay" > /etc/modules-load.d/overlay.conf
+$ lsmod | grep over
+
+$ sed -i -e '/^ExecStart=/ s/$/ --storage-driver=overlay/' /usr/lib/systemd/system/docker.service \
+rm /var/lib/docker -rf
+
+```
 

@@ -37,6 +37,11 @@ spec:
         app: heapster
     spec:
       serviceAccountName: heapster
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
       containers:
       - name: heapster
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest

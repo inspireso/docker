@@ -14,6 +14,11 @@ spec:
         task: monitoring
         app: influxdb
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+       node-role.kubernetes.io/master: ""
       volumes:
       - name: data
         emptyDir: {}

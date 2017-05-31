@@ -114,7 +114,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/inspireso/docker/kubernetes
 ```sh
 $ yum install -y nfs-utils
 
-$ images=(kube-proxy-amd64:v1.6.3 pause-amd64:3.0)
+$ images=(kube-proxy-amd64:v1.6.4 pause-amd64:3.0)
 for imageName in ${images[@]} ; do
   docker pull registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName
   docker tag registry.cn-hangzhou.aliyuncs.com/kube_containers/$imageName gcr.io/google_containers/$imageName
@@ -183,10 +183,9 @@ $ rpm -qa | grep kernel
 
 ```sh
 $ echo "overlay" > /etc/modules-load.d/overlay.conf
-$ lsmod | grep over
+$ lsmod | grep overlay
 
 $ sed -i -e '/^ExecStart=/ s/$/ --storage-driver=overlay/' /usr/lib/systemd/system/docker.service \
 rm /var/lib/docker -rf
-
 ```
 

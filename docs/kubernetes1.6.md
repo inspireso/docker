@@ -16,11 +16,11 @@ $ yum remove -y firewalld
 
 #内核参数设置
 $ setenforce 0
-$ echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-$ echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
-$ echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
-$ echo "net.netfilter.nf_conntrack_max=1000000" >> /etc/sysctl.conf
-$ echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
+$ echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf \
+  && echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf \
+  && echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf \
+  && echo "net.netfilter.nf_conntrack_max=1000000" >> /etc/sysctl.conf \
+  && echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
 $ sysctl -p
 
 #更改镜像为阿里镜像
@@ -50,7 +50,7 @@ $ yum install -y yum-versionlock docker-engine-selinux-1.12.6-1.el7.centos.noarc
 $ yum versionlock add docker-engine-selinux docker-engine
 
 #安装kubernetes组件
-$ yum install -y  kubelet-1.6.3-0 kubectl-1.6.3-0 kubeadm-1.6.3-0 kubernetes-cni
+$ yum install -y  kubelet-1.6.4-0 kubectl-1.6.4-0 kubeadm-1.6.4-0 kubernetes-cni
 $ systemctl enable docker && systemctl start docker
 $ systemctl enable kubelet && systemctl start kubelet
 
@@ -95,6 +95,7 @@ for imageName in ${images[@]} ; do
 done
 
 $ kubeadm init  --pod-network-cidr="10.1.0.0/16" --kubernetes-version=$kube_version
+$ cp /etc/kubernetes/admin.conf $HOME/
 
 #配置网络CNI
 #测试环境：直接使用weavenet
@@ -166,7 +167,7 @@ $ docker rm -f $(docker ps -a -q)
 $ rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org \
 && rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm \
 && yum clean all \
-&& yum --enablerepo=elrepo-kernel install kernel-ml \
+&& yum --enablerepo=elrepo-kernel install kernel-lt \
 && grub2-set-default 0
 
 # 查看
@@ -183,9 +184,11 @@ $ rpm -qa | grep kernel
 
 ```sh
 $ echo "overlay" > /etc/modules-load.d/overlay.conf
+$ modprobe overlay
 $ lsmod | grep overlay
 
-$ sed -i -e '/^ExecStart=/ s/$/ --storage-driver=overlay/' /usr/lib/systemd/system/docker.service \
-rm /var/lib/docker -rf
+$ sed -i -e '/^ExecStart=/ s/$/ --storage-driver=overlay2/' /usr/lib/systemd/system/docker.service \
+systemctl daemon-reload
+$ rm /var/lib/docker -rf
 ```
 

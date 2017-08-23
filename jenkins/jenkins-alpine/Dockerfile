@@ -1,4 +1,4 @@
-FROM jenkins:2.32.2-alpine
+FROM jenkins:alpine
 
 ENV GOSU_VERSION 1.10
 ENV KUBE_VERSION v1.5.1

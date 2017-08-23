@@ -1,4 +1,4 @@
-FROM jenkins:2.32.2
+FROM jenkins:latest
 
 ENV GOSU_VERSION 1.10
 

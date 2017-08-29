@@ -35,7 +35,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 ENV JAVA_VERSION=8 \
     JAVA_UPDATE=144 \
-    JAVA_HOME="/usr/lib/jvm/default-jvm" \
+    JAVA_HOME="/usr/lib/jvm/java-${JAVA_VERSION}-oracle" \
     LANG=C.UTF-8
 
 #install java
@@ -45,8 +45,7 @@ RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip &
         "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/server-jre-8u144-linux-x64.tar.gz" && \
     tar -xzf "server-jre-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     mkdir -p "/usr/lib/jvm" && \
-    mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
-    ln -s "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" "$JAVA_HOME" && \
+    mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "$JAVA_HOME" && \
     ln -s "$JAVA_HOME/bin/"* "/usr/bin/" && \
     wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
         "http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION}/jce_policy-${JAVA_VERSION}.zip" && \

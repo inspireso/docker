@@ -35,7 +35,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 ENV JAVA_VERSION=8 \
     JAVA_UPDATE=144 \
-    JAVA_HOME="/usr/lib/jvm/java-${JAVA_VERSION}-oracle" \
+    JAVA_HOME="/usr/lib/jvm/java-8-oracle" \
     LANG=C.UTF-8
 
 #install java

@@ -15,7 +15,7 @@ RUN set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates libfontconfig  wget \
     && apt-get clean \
-    && wget -O grafana.deb "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.6.1_amd64.deb" \
+    && wget -O grafana.deb "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.5.2_amd64.deb" \
     && dpkg -i grafana.deb \
     && rm -f grafana.deb \
     && rm -rf /var/lib/apt/lists/*

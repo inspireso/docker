@@ -1,7 +1,7 @@
 #ALTER RETENTION POLICY "default" ON "k8s" DURATION 2w DEFAULT
 
-kind: Deployment
 apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   name: influxdb
   namespace: kube-system

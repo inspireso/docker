@@ -16,6 +16,7 @@ spec:
         task: monitoring
         app: influxdb
     spec:
+      #部署在master节点
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
@@ -23,7 +24,8 @@ spec:
        node-role.kubernetes.io/master: ""
       volumes:
       - name: data
-        emptyDir: {}
+        hostPath:
+          path: /data
       containers:
       - name: influxdb
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb:latest

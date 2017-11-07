@@ -12,7 +12,7 @@ metadata:
   name: heapster
 subjects:
   - kind: ServiceAccount
-    name: heapster
+    name: system:heapster
     namespace: kube-system
 roleRef:
   kind: ClusterRole
@@ -37,11 +37,12 @@ spec:
         app: heapster
     spec:
       serviceAccountName: heapster
+      #部署在master节点
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
       nodeSelector:
-        node-role.kubernetes.io/master: ""
+       node-role.kubernetes.io/master: ""
       containers:
       - name: heapster
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster:latest

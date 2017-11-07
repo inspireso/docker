@@ -167,7 +167,7 @@ spec:
         # container programs network policy and routes on each
         # host.
         - name: calico-node
-          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/node:latest
+          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/node:v2.6.2
           env:
             # The location of the Calico etcd cluster.
             - name: ETCD_ENDPOINTS

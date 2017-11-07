@@ -192,7 +192,7 @@ spec:
               value: "ACCEPT"
             # Configure the IP Pool from which Pod IPs will be chosen.
             - name: CALICO_IPV4POOL_CIDR
-              value: "10.1.0.0/16"
+              value: "192.168.0.0/16"
             - name: CALICO_IPV4POOL_IPIP
               value: "always"
             # Disable IPv6 on Kubernetes.
@@ -236,7 +236,7 @@ spec:
         # This container installs the Calico CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: quay.io/calico/cni:v1.11.0
+          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/cni:v1.11.0
           command: ["/install-cni.sh"]
           env:
             # The location of the Calico etcd cluster.
@@ -363,7 +363,7 @@ spec:
       serviceAccountName: calico-kube-controllers
       containers:
         - name: calico-policy-controller
-          image: quay.io/calico/kube-controllers:v1.0.0
+          image: registry.cn-hangzhou.aliyuncs.com/calico_containers/kube-controllers:v1.0.0
           env:
             - name: ETCD_ENDPOINTS
               valueFrom:

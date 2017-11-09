@@ -99,6 +99,13 @@ spec:
       labels:
         k8s-app: kubernetes-dashboard
     spec:
+      serviceAccountName: kubernetes-dashboard
+      # Comment the following tolerations if Dashboard must not be deployed on master
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
       initContainers:
       - name: kubernetes-dashboard-init
         image: registry.cn-hangzhou.aliyuncs.com/kube_containers/kubernetes-dashboard-init-amd64:v1.0.1
@@ -138,12 +145,6 @@ spec:
           secretName: kubernetes-dashboard-certs
       - name: tmp-volume
         emptyDir: {}
-      serviceAccountName: kubernetes-dashboard
-      # Comment the following tolerations if Dashboard must not be deployed on master
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
-
 ---
 # ------------------- Dashboard Service ------------------- #
 

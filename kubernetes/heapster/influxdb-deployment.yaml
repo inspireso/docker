@@ -21,7 +21,7 @@ spec:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
       nodeSelector:
-       node-role.kubernetes.io/master: ""
+        node-role.kubernetes.io/master: ""
       volumes:
       - name: data
         hostPath:

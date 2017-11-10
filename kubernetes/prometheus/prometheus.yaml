@@ -311,9 +311,22 @@ metadata:
 spec:
   selector:
     app: prometheus
-  type: NodePort
+#  type: NodePort
   ports:
   - name: prometheus
     protocol: TCP
     port: 9090
-    nodePort: 30900
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  rules:
+  - host: prometheus.k8s.local
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus
+          servicePort: 9090

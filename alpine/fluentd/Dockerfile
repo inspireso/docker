@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:latest
 
 # Do not split this into multiple RUN!
 # Docker creates a layer for every RUN-Statement

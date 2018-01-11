@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:latest
 
 ENV GOSU_VERSION 1.10
 RUN set -x \

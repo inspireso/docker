@@ -33,7 +33,6 @@ ENV CONFIG "\
     --with-mail \
     --with-mail_ssl_module \
     --with-file-aio \
-    --with-http_spdy_module \
     --with-ipv6 \
     --with-jemalloc \
     --with-http_v2_module \

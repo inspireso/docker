@@ -55,7 +55,7 @@ RUN \
   && curl -v --insecure "http://tengine.taobao.org/download/tengine-${TENGINE_VERSION}.tar.gz" -o tengine.tar.gz \
   && mkdir -p /usr/src \
   && tar -xzf tengine.tar.gz -C /usr/src/ \
-  && rm tengine.zip \
+  && rm tengine.tar.gz \
   && cd /usr/src/tengine-$TENGINE_VERSION \
   && ./configure $CONFIG --with-debug \
   && make \

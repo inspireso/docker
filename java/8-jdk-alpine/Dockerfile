@@ -88,7 +88,7 @@ RUN JAVA_PACKAGE_FILENAME="jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" 
     apk del build-dependencies && \
     rm "/tmp/"*
 
-RUN apk update && apk add ca-certificates && \
+RUN apk add ca-certificates && \
     apk add tzdata && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone

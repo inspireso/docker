@@ -2,7 +2,7 @@ FROM alpine:latest
 
 MAINTAINER lan.xinen <lan.xinen@inspireso.cn>
 
-ENV TENGINE_VERSION 2.2.1
+ENV TENGINE_VERSION 2.2.2
 ENV CONFIG "\
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \

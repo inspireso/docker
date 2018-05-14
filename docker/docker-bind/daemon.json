@@ -1,3 +1,5 @@
 {
+  "storage-driver": "overlay2",
+  "selinux-enabled": false,
   "registry-mirrors": ["https://w6gp6d0a.mirror.aliyuncs.com"]
 }

@@ -1,0 +1,19 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: rook
+  labels:
+    name: rook
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rook-config-override
+  namespace: rook
+data:
+  config: |
+    [global]
+    osd crush update on start = false
+    osd pool default size     = 2
+    osd pool default pg num   = 256

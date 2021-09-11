@@ -1,0 +1,63 @@
+#ALTER RETENTION POLICY "default" ON "k8s" DURATION 2w DEFAULT
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: influxdb
+  namespace: kube-system
+  labels:
+    task: monitoring
+    app: influxdb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        task: monitoring
+        app: influxdb
+    spec:
+      #部署在master节点
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      volumes:
+      - name: data
+        hostPath:
+          path: /data
+      containers:
+      - name: influxdb
+        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/heapster_influxdb:latest
+        imagePullPolicy: Always
+        env:
+        - name: INFLUXDB_ADMIN_ENABLED
+          value: "true"
+        volumeMounts:
+        - mountPath: /data
+          name: data
+          subPath: influxdb
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    task: monitoring
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/cluster-service: 'true'
+    kubernetes.io/name: influxdb
+  name: influxdb
+  namespace: kube-system
+spec:
+  type: NodePort
+  ports:
+  - name: api
+    port: 8086
+    targetPort: 8086
+  - name: admin
+    port: 8083
+    targetPort: 8083
+  selector:
+    app: influxdb

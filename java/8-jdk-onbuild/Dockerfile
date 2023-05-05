@@ -18,7 +18,7 @@ ENTRYPOINT ["/sbin/tini", "--"]
 # copy arthas
 COPY --from=hengyunabc/arthas:latest /opt/arthas /opt/arthas
 
-COPY /rootfs /
+COPY ./rootfs /
 CMD ["/bin/sh", "/run.sh"]
 
 # add app user

@@ -81,7 +81,7 @@ jobs:
         with:
           context: ./java/8-jdk-alpine/
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk-onbuild
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk-alpine
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -90,7 +90,7 @@ jobs:
         with:
           context: ./java/8-jre-alpine/
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk-onbuild
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jre-alpine
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

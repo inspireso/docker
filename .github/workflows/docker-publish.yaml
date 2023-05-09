@@ -63,7 +63,7 @@ jobs:
         with:
           context: ./cloud/admin/
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cloud-admin:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cloud-admin:2.6
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -10,5 +10,4 @@ USER root
 RUN mkdir -p /app
 # copy jar from the first stage
 COPY --chown=app:app --from=builder target/bootstrap.jar /app/bootstrap.jar
-
 USER app

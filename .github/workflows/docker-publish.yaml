@@ -51,7 +51,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: inspireso/cloud:admin
+          images: inspireso/sba
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -60,7 +60,7 @@ jobs:
         with:
           context: ./cloud/admin/
           push: true
-          tags: inspireso/cloud-admin:2.6
+          tags: inspireso/sba:2.6
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

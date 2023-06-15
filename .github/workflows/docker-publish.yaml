@@ -60,7 +60,7 @@ jobs:
         with:
           context: ./cloud/admin/
           push: true
-          tags: inspireso/sba:2.6.1
+          tags: inspireso/sba:2.6.2
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

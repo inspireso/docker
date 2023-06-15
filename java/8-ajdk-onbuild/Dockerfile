@@ -24,4 +24,8 @@ COPY --from=hengyunabc/arthas:latest /opt/arthas /opt/arthas
 COPY /rootfs /
 CMD ["/bin/sh", "/run.sh"]
 
-ONBUILD COPY ./app /app
+# add app user
+RUN groupadd -g 1001 app && useradd -m -d /app -u 1001 -g app app && \
+    chown -R app:app /opt
+
+ONBUILD COPY --chown=app:app ./app /app

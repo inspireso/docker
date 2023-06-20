@@ -1,0 +1,1 @@
+FROM inspireso/sba:2.6.2

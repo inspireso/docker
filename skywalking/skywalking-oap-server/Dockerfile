@@ -1,0 +1,1 @@
+FROM apache/skywalking-oap-server:9.5.0

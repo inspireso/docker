@@ -64,7 +64,7 @@ jobs:
         with:
           context: ./cloud/admin/
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/sba:2.6.2
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/sba:2.6
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

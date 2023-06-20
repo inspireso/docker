@@ -1,1 +1,1 @@
-FROM inspireso/sba:2.6.2
+FROM ghcr.io/inspireso/docker/sba:2.6

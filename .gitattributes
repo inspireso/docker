@@ -1,0 +1,2 @@
+*.jar filter=lfs diff=lfs merge=lfs -text
+open-telemetry/opentelemetry-operator-amd64/manager filter=lfs diff=lfs merge=lfs -text

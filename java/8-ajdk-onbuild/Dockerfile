@@ -1,4 +1,4 @@
-FROM alibabadragonwell/dragonwell:8.14.15-extended-ga-ubuntu
+FROM alibabadragonwell/dragonwell:8.15.16-extended-ga-ubuntu
 
 ENV LANG zh_CN.UTF-8
 
@@ -10,6 +10,7 @@ RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://mirrors.aliyun.com/ubuntu/
     sed -i 's|http://cn.archive.ubuntu.com/ubuntu|http://mirrors.aliyun.com/ubuntu/|' /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends dos2unix tini ttf-dejavu ca-certificates tzdata && \
+    echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen zh_CN.UTF-8 && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \

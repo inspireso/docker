@@ -63,9 +63,12 @@ jobs:
           cp -rf ./rootfs ./8-ajdk-onbuild/
           cp -rf ./rootfs ./8-jdk-alpine/
           cp -rf ./rootfs ./8-jdk-onbuild/
-          cp -rf ./rootfs ./8-jre-alpine/
+          cp -rf ./rootfs ./11-jdk/
           cp -rf ./rootfs ./11-jdk-onbuild/
+          cp -rf ./rootfs ./17-jdk/
           cp -rf ./rootfs ./17-jdk-onbuild/
+          cp -rf ./rootfs ./21-jdk/
+          cp -rf ./rootfs ./21-jdk-onbuild/
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action

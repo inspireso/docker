@@ -105,6 +105,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: 11-jdk
+        uses: docker/build-push-action@v4
+        with:
+          context: ./java/11-jdk/
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:11-jdk
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max          
       - name: 11-jdk-onbuild
         uses: docker/build-push-action@v4
         with:
@@ -114,7 +123,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+      - name: 17-jdk
+        uses: docker/build-push-action@v4
+        with:
+          context: ./java/17-jdk/
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:17-jdk
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max  
       - name: 17-jdk-onbuild
         uses: docker/build-push-action@v4
         with:
@@ -123,5 +140,23 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:17-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max          
+          cache-to: type=gha,mode=max
+      - name: 21-jdk
+        uses: docker/build-push-action@v4
+        with:
+          context: ./java/21-jdk/
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:21-jdk
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max  
+      - name: 21-jdk-onbuild
+        uses: docker/build-push-action@v4
+        with:
+          context: ./java/21-jdk-onbuild/
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:21-jdk-onbuild
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max                 
           

@@ -61,7 +61,7 @@ jobs:
           cd java
           cp -rf ./rootfs ./8-ajdk/
           cp -rf ./rootfs ./8-ajdk-onbuild/
-          cp -rf ./rootfs ./8-jdk-alpine/
+          cp -rf ./rootfs ./8-jdk/
           cp -rf ./rootfs ./8-jdk-onbuild/
           cp -rf ./rootfs ./11-jdk/
           cp -rf ./rootfs ./11-jdk-onbuild/

@@ -22,14 +22,10 @@ env:
 
 jobs:
   java:
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        arch: [arm64, amd64] 
 
     steps:
       - name: Checkout repository
@@ -99,6 +95,7 @@ jobs:
         with:
           context: ./java/8-jdk/
           push: true
+          platforms: linux/arm64,linux/amd64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

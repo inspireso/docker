@@ -20,7 +20,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  java:
+  build:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -111,6 +111,7 @@ jobs:
         with:
           context: ./java/8-jdk-onbuild/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -120,6 +121,7 @@ jobs:
         with:
           context: ./java/11-jdk/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:11-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -129,6 +131,7 @@ jobs:
         with:
           context: ./java/11-jdk-onbuild/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:11-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -138,6 +141,7 @@ jobs:
         with:
           context: ./java/17-jdk/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:17-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -147,6 +151,7 @@ jobs:
         with:
           context: ./java/17-jdk-onbuild/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:17-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -156,6 +161,7 @@ jobs:
         with:
           context: ./java/21-jdk/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:21-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -165,6 +171,7 @@ jobs:
         with:
           context: ./java/21-jdk-onbuild/
           push: true
+          platforms: ${{ matrix.platform }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:21-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

@@ -104,6 +104,7 @@ jobs:
           context: ./java/8-jdk/
           push: true
           platforms: ${{ matrix.platform }}
+          provenance: false
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -114,6 +115,7 @@ jobs:
           context: ./java/8-jdk-onbuild/
           push: true
           platforms: ${{ matrix.platform }}
+          provenance: false
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

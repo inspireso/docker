@@ -24,12 +24,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
     permissions:
       contents: read
       packages: write
@@ -81,101 +75,103 @@ jobs:
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: 8-ajdk
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/8-ajdk/
           push: true
+          platforms: linux/amd64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-ajdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 8-ajdk-onbuild
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/8-ajdk-onbuild/
           push: true
+          platforms: linux/amd64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-ajdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 8-jdk
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/8-jdk/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           provenance: false
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 8-jdk-onbuild
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/8-jdk-onbuild/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           provenance: false
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:8-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 11-jdk
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/11-jdk/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:11-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 11-jdk-onbuild
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/11-jdk-onbuild/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:11-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 17-jdk
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/17-jdk/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:17-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 17-jdk-onbuild
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/17-jdk-onbuild/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:17-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 21-jdk
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/21-jdk/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:21-jdk
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 21-jdk-onbuild
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./java/21-jdk-onbuild/
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/java:21-jdk-onbuild
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
